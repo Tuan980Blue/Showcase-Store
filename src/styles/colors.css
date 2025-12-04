@@ -1,0 +1,84 @@
+:root {
+    /* Brand */
+    --brand-green: #33cc66;
+    --brand-navy: #0a2a43;
+    --brand-mint: #c8f7c5;
+
+    /* Background */
+    --bg-light: #f8fff9;
+    --bg-mint: #e8ffef;
+    --bg-grey: #f2f4f7;
+
+    /* Text */
+    --text-green: #33cc66;
+    --text-dark: #0a1f33;
+    --text-medium: #435a6b;
+    --text-light: #6f8a99;
+    --text-inverse: #ffffff;
+
+    /* Buttons */
+    --btn-primary: #33cc66;
+    --btn-primary-hover: #28a95b;
+    --btn-secondary: #0a2a43;
+    --btn-secondary-hover: #082033;
+
+    /* Borders & Icons */
+    --border-light: #dce6e9;
+    --border-dark: #a3b8bf;
+    --icon-main: #33cc66;
+    --icon-sub: #0a2a43;
+
+    /* States */
+    --state-success: #33cc66;
+    --state-warning: #ffcc33;
+    --state-error: #ff4d4d;
+    --state-info: #3aa0ff;
+
+    /* Effects */
+    --shadow-soft: rgba(0, 0, 0, 0.08);
+    --shadow-strong: rgba(0, 0, 0, 0.15);
+    --overlay: rgba(0, 0, 0, 0.45);
+}
+
+:root {
+    /* Brand */
+    --brand-green: #33cc66;
+    --brand-navy: #0a2a43;
+    --brand-mint: #c8f7c5;
+
+    /* Background */
+    --bg-light: #f8fff9;
+    --bg-mint: #e8ffef;
+    --bg-grey: #f2f4f7;
+
+    /* Text */
+    --text-dark: #0a1f33;
+    --text-medium: #435a6b;
+    --text-light: #6f8a99;
+    --text-inverse: #ffffff;
+
+    /* Buttons */
+    --btn-primary: #33cc66;
+    --btn-primary-hover: #28a95b;
+    --btn-secondary: #0a2a43;
+    --btn-secondary-hover: #082033;
+
+    /* Borders & Icons */
+    --border-light: #dce6e9;
+    --border-dark: #a3b8bf;
+    --icon-main: #33cc66;
+    --icon-sub: #0a2a43;
+
+    /* States */
+    --state-success: #33cc66;
+    --state-warning: #ffcc33;
+    --state-error: #ff4d4d;
+    --state-info: #3aa0ff;
+
+    /* Effects */
+    --shadow-soft: rgba(0, 0, 0, 0.08);
+    --shadow-strong: rgba(0, 0, 0, 0.15);
+    --overlay: rgba(0, 0, 0, 0.45);
+}
+
+

@@ -13,8 +13,11 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "SẢN PHẨM TRƯNG BÀY",
-  description: "",
+  title: "ĐIỆN TỬ TUẤN ANH - CHUYÊN BÁN ĐỒ DA DỤNG, LINH KIỆN ĐIỆN TỬ VÀ NHIỀU SẢN PHẨM SỨC KHOẺ",
+  description: "T-Shop (Hardware Shop) là cửa hàng chuyên bán các sản phẩm Điện tử",
+    icons: {
+        icon: "/logo.png",
+    },
 };
 
 export default function RootLayout({
