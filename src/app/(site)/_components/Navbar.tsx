@@ -3,6 +3,7 @@
 import Link from "next/link";
 import {useEffect, useRef, useState} from "react";
 import Image from "next/image";
+import { HiHome, HiShoppingBag, HiViewGrid, HiBookOpen, HiMail, HiInformationCircle, HiChevronDown } from "react-icons/hi";
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,7 +17,7 @@ const Navbar = () => {
         const handleScroll = () => {
             if (!headerRef.current) return;
             const headerBottom = headerRef.current.getBoundingClientRect().bottom;
-            setIsMainNavFixed(headerBottom <= 0);
+            setIsMainNavFixed(headerBottom <= 50);
         };
 
         handleScroll();
@@ -33,12 +34,12 @@ const Navbar = () => {
     };
 
     const navItems = [
-        {id: 'home', label: 'TRANG CHỦ', path: '/'},
-        {id: 'products', label: 'TẤT CẢ SẢN PHẨM', path: '/products'},
-        {id: 'categories', label: 'DANH MỤC', path: '/categories', hasDropdown: true},
-        {id: 'blog', label: 'BLOG HƯỚNG DẪN KỸ THUẬT', path: '/blog', hasDropdown: true},
-        {id: 'contact', label: 'LIÊN HỆ', path: '/contact'},
-        {id: 'about', label: 'GIỚI THIỆU', path: '/about'},
+        {id: 'home', label: 'TRANG CHỦ', path: '/', icon: HiHome},
+        {id: 'products', label: 'TẤT CẢ SẢN PHẨM', path: '/products', icon: HiShoppingBag},
+        {id: 'categories', label: 'DANH MỤC', path: '/categories', hasDropdown: true, icon: HiViewGrid},
+        {id: 'blog', label: 'BLOG HƯỚNG DẪN KỸ THUẬT', path: '/blog', hasDropdown: true, icon: HiBookOpen},
+        {id: 'contact', label: 'LIÊN HỆ', path: '/contact', icon: HiMail},
+        {id: 'about', label: 'GIỚI THIỆU', path: '/about', icon: HiInformationCircle},
     ];
 
     return (
@@ -55,7 +56,7 @@ const Navbar = () => {
                 <div className="container mx-auto px-4 py-2">
                     <div
                         className="flex flex-wrap items-center justify-between text-sm"
-                        style={{ color: "var(--text-dark)" }}
+                        style={{ color: "var(--text-green)" }}
                     >
                         {/* Left - Address */}
                         <div className="flex items-center gap-2 mb-1 md:mb-0">
@@ -71,7 +72,7 @@ const Navbar = () => {
                                 <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
                                 <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
                             </svg>
-                            <span className={"text-red-500"}>dientutuananh@gmail.com</span>
+                            <span className={"text-red-500"}>dientutuananhhcm@gmail.com</span>
                         </div>
 
                         {/* Right - Zalo Contact */}
@@ -111,14 +112,16 @@ const Navbar = () => {
                             <div className="flex flex-col">
                                 <Link
                                     href="/"
-                                    className="text-xl md:text-2xl font-extrabold tracking-tight leading-snug transition-colors"
+                                    className="text-sm sm:text-lg md:text-xl font-bold leading-tight transition-all duration-200 hover:text-opacity-70"
                                     style={{
                                         color: "var(--brand-navy)",
                                         textTransform: "uppercase",
+                                        letterSpacing: "0.02em",
                                     }}
                                 >
                                     Điện Tử Tuấn Anh
                                 </Link>
+
                                 <p
                                     className="text-[11px] md:text-xs font-semibold mt-1 uppercase tracking-wide"
                                     style={{ color: "var(--brand-green)" }}
@@ -172,15 +175,15 @@ const Navbar = () => {
                                 </button>
                             </form>
                             <p
-                                className="text-xs mt-1"
+                                className="text-xs mt-1 italic"
                                 style={{ color: "var(--text-light)" }}
                             >
-                                Tìm sản phẩm: Chuột, Máy đo huyết áp, Camera...
+                                Tìm sản phẩm: Đèn, Chuột, Máy đo huyết áp, Camera...
                             </p>
                         </div>
 
                         {/* Right - Action Icons */}
-                        <div className="flex items-center gap-3 lg:gap-4">
+                        <div className="flex items-center gap-2 lg:gap-4">
                             {[
                                 {
                                     id: "tiktok",
@@ -190,7 +193,7 @@ const Navbar = () => {
                                 },
                                 {
                                     id: "shopee",
-                                    href: "https://shopee.vn/",
+                                    href: "https://vn.shp.ee/E74Wp9t",
                                     label: "Shopee",
                                     icon: "/shopee.png",
                                 },
@@ -242,31 +245,30 @@ const Navbar = () => {
                     color: "var(--text-inverse)",
                 }}
             >
-                <div className="container mx-auto px-4">
-                    <div className="flex flex-wrap items-center justify-center gap-4 lg:gap-10 py-3">
-                        {navItems.map((item) => (
-                            <Link
-                                key={item.id}
-                                href={item.path}
-                                className="flex items-center gap-2 transition-colors text-sm lg:text-base font-medium"
-                                style={{ color: "var(--text-inverse)" }}
-                            >
-                                <svg
-                                    className="w-3 h-3"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                    style={{ color: "var(--icon-main)" }}
+                <div className="container mx-auto px-1 lg:px-2">
+                    <div className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 lg:gap-10 py-3">
+                        {navItems.map((item) => {
+                            const IconComponent = item.icon;
+                            return (
+                                <Link
+                                    key={item.id}
+                                    href={item.path}
+                                    className="flex items-center gap-0 sm:gap-1 lg:gap-2 transition-colors font-medium hover:opacity-80"
+                                    style={{ color: "var(--text-inverse)" }}
                                 >
-                                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                                </svg>
-                                <span>{item.label}</span>
-                                {item.hasDropdown && (
-                                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                                    </svg>
-                                )}
-                            </Link>
-                        ))}
+                                    {IconComponent && (
+                                        <IconComponent 
+                                            className="w-3 h-3 lg:w-5 lg:h-5 flex-shrink-0"
+                                            style={{ color: "var(--icon-main)" }}
+                                        />
+                                    )}
+                                    <span className="text-[5px] sm:text-[10px] lg:text-[12px] xl:text-base">{item.label}</span>
+                                    {item.hasDropdown && (
+                                        <HiChevronDown className="w-3 h-3 lg:w-5 lg:h-5 flex-shrink-0" />
+                                    )}
+                                </Link>
+                            );
+                        })}
                     </div>
                 </div>
             </div>
