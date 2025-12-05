@@ -1,7 +1,6 @@
 
 import Navbar from "@/app/(site)/_components/Navbar";
 import Footer from "@/app/(site)/_components/Footer";
-import EnhancedPopcornAnimation from "@/app/(site)/_components/EnhancedPopcornAnimation";
 
 
 export default function SiteLayout({
