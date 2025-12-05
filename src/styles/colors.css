@@ -38,6 +38,7 @@
     --shadow-soft: rgba(0, 0, 0, 0.08);
     --shadow-strong: rgba(0, 0, 0, 0.15);
     --overlay: rgba(0, 0, 0, 0.45);
+    --bg-overlay-white: rgba(255, 255, 255, 0.85);
 }
 
 :root {
@@ -79,6 +80,7 @@
     --shadow-soft: rgba(0, 0, 0, 0.08);
     --shadow-strong: rgba(0, 0, 0, 0.15);
     --overlay: rgba(0, 0, 0, 0.45);
+    --bg-overlay-white: rgba(255, 255, 255, 0.85);
 }
 
 

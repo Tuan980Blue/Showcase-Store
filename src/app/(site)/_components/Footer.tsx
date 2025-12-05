@@ -240,7 +240,7 @@ const Footer = () => {
                         <div className="flex flex-wrap gap-2 sm:gap-3">
                             {/* Shoppe Button */}
                             <a
-                                href="https://tuananhhuflit.id.vn/"
+                                href="https://shopee.vn/anhtuan321996?uls_trackid=54bqaui200bi&utm_content=2UnvdcGse5iLmYmRzwPLqAXdDZFu"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="group/social flex items-center gap-1 sm:gap-2 px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 lg:py-2.5 rounded-lg transition-all duration-200 hover:scale-105 hover:shadow-lg"
@@ -276,7 +276,7 @@ const Footer = () => {
 
                             {/* Zalo Button */}
                             <a
-                                href="https://tuananhhuflit.id.vn/"
+                                href="https://zalo.me/0941210212"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 className="group/social flex items-center gap-1 sm:gap-2 px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 lg:py-2.5 rounded-lg transition-all duration-200 hover:scale-105 hover:shadow-lg"
