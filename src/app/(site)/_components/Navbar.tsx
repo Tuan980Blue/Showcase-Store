@@ -37,7 +37,7 @@ const Navbar = () => {
         {id: 'products', label: 'TẤT CẢ SẢN PHẨM', path: '/products', icon: HiShoppingBag},
         {id: 'categories', label: 'DANH MỤC', path: '/categories', hasDropdown: true, icon: HiViewGrid},
         {id: 'blog', label: 'BLOG HƯỚNG DẪN KỸ THUẬT', path: '/blog', hasDropdown: true, icon: HiBookOpen},
-        {id: 'service', label: 'DỊCH VỤ', path: '/service', icon: HiMail},
+        {id: 'contact', label: 'DỊCH VỤ', path: '/about', icon: HiMail},
         {id: 'about', label: 'GIỚI THIỆU', path: '/about', icon: HiInformationCircle},
     ];
 
@@ -202,7 +202,7 @@ const Navbar = () => {
                                 },
                                 {
                                     id: "zalo",
-                                    href: "https://id.zalo.me/",
+                                    href: "https://zalo.me/0941210212",
                                     label: "Zalo",
                                     icon: "/zalo.png",
                                 },

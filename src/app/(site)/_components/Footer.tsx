@@ -331,11 +331,6 @@ const Footer = () => {
                                     value: "000.0000.0000",
                                     link: "tel:00000000000"
                                 },
-                                { 
-                                    icon: "💬", 
-                                    label: "Zalo (nhắn tin)", 
-                                    value: "000.0000.0000 - 000.0000.0000" 
-                                },
                             ].map((item, index) => (
                                 <div key={index} className="flex gap-2 sm:gap-3 items-start">
                                     <span className="text-sm sm:text-base lg:text-lg flex-shrink-0 mt-0.5">{item.icon}</span>
