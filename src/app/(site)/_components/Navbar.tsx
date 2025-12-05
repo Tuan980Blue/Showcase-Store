@@ -4,6 +4,7 @@ import Link from "next/link";
 import {useEffect, useRef, useState} from "react";
 import Image from "next/image";
 import { HiHome, HiShoppingBag, HiViewGrid, HiBookOpen, HiMail, HiInformationCircle, HiChevronDown } from "react-icons/hi";
+import "@/styles/santa-animations.css";
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -43,10 +44,65 @@ const Navbar = () => {
 
     return (
         <nav
-            className="relative shadow-lg"
-            ref={headerRef}
-            style={{ backgroundColor: "var(--bg-light)", color: "var(--text-dark)" }}
-        >
+                className="relative shadow-lg overflow-hidden"
+                ref={headerRef}
+                style={{ backgroundColor: "var(--bg-light)", color: "var(--text-dark)" }}
+            >
+                {/* Animated Santa Claus in Corner */}
+                <div 
+                    className="fixed top-2 right-2 sm:top-10 lg:top-24 sm:right-4 z-[60] pointer-events-none santa-container"
+                >
+                    <div className="relative">
+                        <svg 
+                            width="70" 
+                            height="70" 
+                            viewBox="0 0 100 100" 
+                            className="drop-shadow-lg santa-svg"
+                            style={{
+                                filter: 'drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4))'
+                            }}
+                        >
+                            {/* Santa Hat */}
+                            <path d="M50 5 L20 35 L15 30 L10 35 L5 30 L0 35 L0 25 Q0 5 15 5 L50 5 Z" fill="#DC2626"/>
+                            <path d="M50 5 L20 35 L15 30 L10 35 L5 30 L0 35 L0 25 Q0 5 15 5 L50 5 Z" fill="#EF4444" opacity="0.8"/>
+                            <circle cx="42" cy="22" r="4" fill="white"/>
+                            <circle cx="38" cy="20" r="3" fill="white"/>
+                            <circle cx="46" cy="20" r="2.5" fill="white"/>
+                            
+                            {/* Santa Face */}
+                            <circle cx="50" cy="50" r="28" fill="#FED7AA" stroke="#FBBF24" strokeWidth="1"/>
+                            <circle cx="42" cy="42" r="5" fill="#1F2937"/>
+                            <circle cx="58" cy="42" r="5" fill="#1F2937"/>
+                            <circle cx="44" cy="44" r="2" fill="white"/>
+                            <circle cx="60" cy="44" r="2" fill="white"/>
+                            <ellipse cx="50" cy="55" rx="10" ry="6" fill="#DC2626"/>
+                            
+                            {/* Beard */}
+                            <path d="M50 58 Q35 75 30 82 Q42 78 50 70 Q58 78 70 82 Q65 75 50 58 Z" fill="white" opacity="0.95"/>
+                            <path d="M50 60 Q40 72 36 78 Q45 75 50 68 Q55 75 64 78 Q60 72 50 60 Z" fill="#F3F4F6"/>
+                            
+                            {/* Body */}
+                            <ellipse cx="50" cy="88" rx="22" ry="18" fill="#DC2626"/>
+                            <ellipse cx="50" cy="88" rx="20" ry="16" fill="#EF4444" opacity="0.7"/>
+                            
+                            {/* Belt */}
+                            <rect x="30" y="80" width="40" height="8" fill="#1F2937"/>
+                            <rect x="45" y="82" width="10" height="4" fill="#FBBF24"/>
+                            
+                            {/* Sparkles for festive effect */}
+                            <circle cx="15" cy="15" r="1.5" fill="#FBBF24" opacity="0.8">
+                                <animate attributeName="opacity" values="0.3;1;0.3" dur="1.5s" repeatCount="indefinite"/>
+                            </circle>
+                            <circle cx="85" cy="20" r="1.5" fill="#FBBF24" opacity="0.8">
+                                <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
+                            </circle>
+                            <circle cx="20" cy="85" r="1.5" fill="#FBBF24" opacity="0.8">
+                                <animate attributeName="opacity" values="0.3;1;0.3" dur="1.8s" repeatCount="indefinite"/>
+                            </circle>
+                        </svg>
+                </div>
+            </div>
+
             {/* Top Information Bar */}
             <div
                 className="border-b"
