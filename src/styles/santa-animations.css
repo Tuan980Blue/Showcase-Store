@@ -1,0 +1,53 @@
+@keyframes santaFloat {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+}
+
+@keyframes santaSlide {
+    0%, 100% {
+        transform: translateX(0px) translateY(0px);
+    }
+    25% {
+        transform: translateX(-10px) translateY(-5px);
+    }
+    50% {
+        transform: translateX(0px) translateY(-10px);
+    }
+    75% {
+        transform: translateX(10px) translateY(-5px);
+    }
+}
+
+@keyframes santaWave {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(-8deg);
+    }
+    75% {
+        transform: rotate(8deg);
+    }
+}
+
+@keyframes santaBounce {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+.santa-container {
+    animation: santaFloat 3s ease-in-out infinite, santaSlide 8s ease-in-out infinite, santaBounce 2s ease-in-out infinite;
+}
+
+.santa-svg {
+    animation: santaWave 2s ease-in-out infinite;
+}
+
