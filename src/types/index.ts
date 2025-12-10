@@ -35,4 +35,12 @@ export type {
   BlogPostResponseDto,
 } from './blog.types';
 
+// Cloudinary Types
+export type {
+  CloudinaryUploadResultDto,
+  CloudinaryTransformOptionsDto,
+  CloudinaryUploadFromUrlDto,
+  CloudinaryDeleteResponseDto,
+} from './cloudinary.types';
+
 

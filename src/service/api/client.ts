@@ -58,11 +58,15 @@ class ApiClient {
     }
   }
 
-  private buildHeaders(extraHeaders?: HeadersInit): HeadersInit {
+  private buildHeaders(extraHeaders?: HeadersInit, isFormData: boolean = false): HeadersInit {
     const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
       ...(extraHeaders as Record<string, string> | undefined),
     };
+
+    // Don't set Content-Type for FormData - browser will set it with boundary
+    if (!isFormData) {
+      headers['Content-Type'] = 'application/json';
+    }
 
     const token = this.getToken();
     if (token) {
@@ -82,12 +86,19 @@ class ApiClient {
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), API_CONFIG.timeout);
 
+    const isFormData = options?.body instanceof FormData;
+    let body: BodyInit | null | undefined;
+    if (isFormData) {
+      body = options?.body as FormData;
+    } else if (options?.body !== undefined) {
+      body = JSON.stringify(options.body);
+    }
+
     try {
       const response = await fetch(fullUrl, {
         method,
-        headers: this.buildHeaders(options?.headers),
-        body:
-          options?.body !== undefined ? JSON.stringify(options.body) : undefined,
+        headers: this.buildHeaders(options?.headers, isFormData),
+        body,
         signal: controller.signal,
       });
 
@@ -99,10 +110,18 @@ class ApiClient {
           ? await response.json().catch(() => null)
           : await response.text().catch(() => null);
 
+      const errorMessage =
+        typeof data === 'object' &&
+        data !== null &&
+        'message' in data &&
+        typeof (data as { message?: unknown }).message === 'string'
+          ? (data as { message: string }).message
+          : response.statusText;
+
       if (!response.ok) {
         throw new ApiError(
           response.status,
-          getErrorMessage(response.status, (data as any)?.message ?? response.statusText),
+          getErrorMessage(response.status, errorMessage),
           data
         );
       }
@@ -119,7 +138,12 @@ class ApiClient {
         throw error;
       }
 
-      if ((error as any)?.name === 'AbortError') {
+      const errorName =
+        typeof error === 'object' && error !== null && 'name' in error
+          ? (error as { name?: unknown }).name
+          : undefined;
+
+      if (errorName === 'AbortError') {
         throw new ApiError(HTTP_STATUS.REQUEST_TIMEOUT, ERROR_MESSAGES.TIMEOUT);
       }
 
@@ -152,6 +176,19 @@ class ApiClient {
 
   delete<T>(url: string): Promise<T> {
     return this.request<T>('DELETE', url);
+  }
+
+  /**
+   * Upload file using FormData
+   * @param url - API endpoint URL
+   * @param formData - FormData object containing the file
+   * @param params - Optional query parameters
+   */
+  upload<T>(url: string, formData: FormData, params?: RequestOptions['params']): Promise<T> {
+    return this.request<T>('POST', url, {
+      body: formData,
+      params,
+    });
   }
 }
 
