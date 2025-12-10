@@ -30,4 +30,11 @@ export const API_ENDPOINTS = {
   SEARCH: {
     PRODUCTS: '/search/products',
   },
+  CLOUDINARY: {
+    BASE: '/cloudinary',
+    UPLOAD: '/cloudinary/upload',
+    UPLOAD_FROM_URL: '/cloudinary/upload-from-url',
+    DELETE: (publicId: string) => `/cloudinary/${publicId}`,
+    TRANSFORM: (publicId: string) => `/cloudinary/transform/${publicId}`,
+  },
 } as const;
