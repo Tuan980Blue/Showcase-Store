@@ -4,6 +4,7 @@ export const API_ENDPOINTS = {
     BASE: '/auth',
     LOGIN: '/auth/login',
     REFRESH: '/auth/refresh',
+    LOGOUT: '/auth/logout',
   },
   PRODUCTS: {
     BASE: '/api/products',

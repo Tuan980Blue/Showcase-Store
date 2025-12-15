@@ -58,7 +58,18 @@ export const authService = {
   /**
    * Đăng xuất - xóa tất cả tokens đã lưu
    */
-  logout(): void {
+  async logout(): Promise<void> {
+    const refreshToken = this.getRefreshToken();
+
+    // Fire and forget server revocation; best effort.
+    if (refreshToken) {
+      try {
+        await apiClient.post<void>(API_ENDPOINTS.AUTH.LOGOUT, { refreshToken });
+      } catch {
+        // ignore logout failures; still clear client tokens
+      }
+    }
+
     apiClient.clearToken();
   },
 

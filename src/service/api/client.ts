@@ -1,4 +1,5 @@
 import { API_CONFIG, ERROR_MESSAGES, HTTP_STATUS, STORAGE_KEYS } from './constants';
+import { API_ENDPOINTS } from './endpoints';
 import { buildQueryString, getErrorMessage, isBrowser, isNetworkError } from './utils';
 
 export class ApiError extends Error {
@@ -79,7 +80,8 @@ class ApiClient {
   private async request<T>(
     method: string,
     url: string,
-    options?: RequestOptions
+    options?: RequestOptions,
+    isRetry: boolean = false
   ): Promise<T> {
     const queryString = buildQueryString(options?.params);
     const fullUrl = `${this.baseURL}${url}${queryString}`;
@@ -135,6 +137,19 @@ class ApiClient {
       clearTimeout(timeoutId);
 
       if (error instanceof ApiError) {
+        // Attempt automatic token refresh on 401 once
+        if (
+          error.status === HTTP_STATUS.UNAUTHORIZED &&
+          !isRetry &&
+          (isBrowser() ? localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN) : null)
+        ) {
+          try {
+            await this.refreshAccessToken();
+            return await this.request<T>(method, url, options, true);
+          } catch {
+            // fall through to rethrow original auth error
+          }
+        }
         throw error;
       }
 
@@ -189,6 +204,42 @@ class ApiClient {
       body: formData,
       params,
     });
+  }
+
+  /**
+   * Refresh access token using stored refresh token.
+   * Uses a direct fetch to avoid recursive call paths.
+   */
+  private async refreshAccessToken(): Promise<void> {
+    if (!isBrowser()) {
+      throw new ApiError(HTTP_STATUS.UNAUTHORIZED, 'No refresh token available');
+    }
+
+    const refreshToken = localStorage.getItem(STORAGE_KEYS.REFRESH_TOKEN);
+    if (!refreshToken) {
+      throw new ApiError(HTTP_STATUS.UNAUTHORIZED, 'No refresh token available');
+    }
+
+    const response = await fetch(`${this.baseURL}${API_ENDPOINTS.AUTH.REFRESH}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refreshToken }),
+    });
+
+    const data = (await response.json().catch(() => null)) as
+      | { accessToken?: string; refreshToken?: string; expiresAt?: string; message?: string }
+      | null;
+
+    if (!response.ok || !data?.accessToken || !data.refreshToken) {
+      throw new ApiError(
+        response.status || HTTP_STATUS.UNAUTHORIZED,
+        data?.message ?? 'Failed to refresh token',
+        data
+      );
+    }
+
+    this.setToken(data.accessToken);
+    localStorage.setItem(STORAGE_KEYS.REFRESH_TOKEN, data.refreshToken);
   }
 }
 

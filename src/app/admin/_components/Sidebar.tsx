@@ -2,14 +2,21 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { authService } from "@/service/services/auth.service";
 
 const Sidebar = () => {
   const pathname = usePathname();
+  const router = useRouter();
 
   const menuItems = [
     { href: "/admin/products", label: "Products" },
-    { href: "/admin/login", label: "Login" },
   ];
+
+  const handleLogout = async () => {
+    await authService.logout();
+    router.push("/admin/login");
+  };
 
   return (
     <aside className="w-64 bg-gray-800 text-white min-h-screen p-4">
@@ -28,6 +35,14 @@ const Sidebar = () => {
               </Link>
             </li>
           ))}
+          <li className="pt-4 border-t border-gray-700 mt-4">
+            <button
+              onClick={handleLogout}
+              className="w-full text-left px-4 py-2 rounded hover:bg-gray-700"
+            >
+              Logout
+            </button>
+          </li>
         </ul>
       </nav>
     </aside>
