@@ -54,5 +54,7 @@ export interface ProductListItemDto {
   price: number;
   slug: string;
   categoryName: string;
+  shopeeLink?: string | null;
+  tikTokLink?: string | null;
 }
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Metadata } from 'next';
-import SidebarCatgory from "@/app/(site)/_components/SidebarCatgory";
+import HomeContentPage from "@/app/(site)/home/page";
 
 export const metadata: Metadata = {
   title: "Trang Chủ",
@@ -23,21 +23,12 @@ export const metadata: Metadata = {
   },
 };
 
-const HomePage = () => {
+const Page = () => {
     return (
-        <div className="container mx-auto px-4 py-6">
-            <div className="flex flex-col lg:flex-row">
-                <div className="hidden lg:block">
-                    <SidebarCatgory />
-                </div>
-
-                {/* Main Content Area */}
-                <div className="flex-1 min-w-0">
-                    {/* Main content của web sẽ được đặt ở đây */}
-                </div>
-            </div>
+        <div className="flex min-h-screen flex-col bg-background text-foreground">
+            <HomeContentPage />
         </div>
     );
 };
 
-export default HomePage;
+export default Page;
