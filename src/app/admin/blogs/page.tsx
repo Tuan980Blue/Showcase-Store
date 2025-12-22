@@ -1,31 +1,56 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { blogPostService, blogCategoryService } from "@/service/services";
 import type {
   BlogPostResponseDto,
   CreateBlogPostDto,
   UpdateBlogPostDto,
 } from "@/types/blog.types";
-import type { BlogCategoryResponseDto } from "@/types/blog.types";
 import BlogPostTable from "./_components/BlogPostTable";
-import BlogPostForm from "./_components/BlogPostForm";
 import ConfirmModal from "./_components/ConfirmModal";
+import AlertMessage from "./_components/AlertMessage";
+import PageHeader from "./_components/PageHeader";
+import BlogPostFormWrapper from "./_components/BlogPostFormWrapper";
+import CreateBlogPostButton from "./_components/CreateBlogPostButton";
+import BlogSearchAndFilter from "./_components/BlogSearchAndFilter";
+import { useBlogs } from "./_hooks/useBlogs";
+import { useBlogFilters } from "./_hooks/useBlogFilters";
 
 const BlogsManagePage = () => {
-  const [posts, setPosts] = useState<BlogPostResponseDto[]>([]);
-  const [categories, setCategories] = useState<BlogCategoryResponseDto[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [categoriesLoading, setCategoriesLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-  const [showUnpublished, setShowUnpublished] = useState(false);
+  // Data management hook
+  const {
+    posts,
+    categories,
+    loading,
+    categoriesLoading,
+    error,
+    success,
+    showUnpublished,
+    setError,
+    setSuccess,
+    setShowUnpublished,
+    createPost,
+    updatePost,
+    deletePost,
+  } = useBlogs();
+
+  // Filtering hook
+  const {
+    filters,
+    filteredPosts,
+    setSearchQuery,
+    setSelectedCategory,
+    setPublishStatus,
+    setSortBy,
+    clearFilters,
+  } = useBlogFilters(posts, categories);
 
   // Form state
   const [showForm, setShowForm] = useState(false);
   const [editingPost, setEditingPost] = useState<BlogPostResponseDto | null>(
     null
   );
+  const [formLoading, setFormLoading] = useState(false);
 
   // Delete confirmation state
   const [deleteConfirm, setDeleteConfirm] = useState<{
@@ -35,48 +60,8 @@ const BlogsManagePage = () => {
     isOpen: false,
     post: null,
   });
-
-  const [formLoading, setFormLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [toggleLoading, setToggleLoading] = useState<number | null>(null);
-
-  // Load posts
-  const loadPosts = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await blogPostService.getAllPosts(showUnpublished);
-      setPosts(data);
-    } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Failed to load blog posts";
-      setError(errorMessage);
-      console.error("Error loading blog posts:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Load categories
-  const loadCategories = async () => {
-    try {
-      setCategoriesLoading(true);
-      const data = await blogCategoryService.getAllCategories();
-      setCategories(data);
-    } catch (err: unknown) {
-      console.error("Error loading blog categories:", err);
-    } finally {
-      setCategoriesLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadCategories();
-  }, []);
-
-  useEffect(() => {
-    loadPosts();
-  }, [showUnpublished]);
 
   // Handle create/edit
   const handleCreate = () => {
@@ -107,21 +92,13 @@ const BlogsManagePage = () => {
       setError(null);
 
       if (editingPost) {
-        // Update existing post
-        await blogPostService.updatePost(
-          editingPost.id,
-          data as UpdateBlogPostDto
-        );
-        setSuccess("Blog post updated successfully!");
+        await updatePost(editingPost.id, data as UpdateBlogPostDto);
       } else {
-        // Create new post
-        await blogPostService.createPost(data as CreateBlogPostDto);
-        setSuccess("Blog post created successfully!");
+        await createPost(data as CreateBlogPostDto);
       }
 
       setShowForm(false);
       setEditingPost(null);
-      await loadPosts();
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : "Failed to save blog post";
@@ -144,14 +121,13 @@ const BlogsManagePage = () => {
       setToggleLoading(post.id);
       setError(null);
 
-      await blogPostService.updatePost(post.id, {
+      await updatePost(post.id, {
         isPublished: !post.isPublished,
       });
 
       setSuccess(
         `Blog post ${!post.isPublished ? "published" : "unpublished"} successfully!`
       );
-      await loadPosts();
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error
@@ -178,11 +154,8 @@ const BlogsManagePage = () => {
     try {
       setDeleteLoading(true);
       setError(null);
-
-      await blogPostService.deletePost(deleteConfirm.post.id);
-      setSuccess("Blog post deleted successfully!");
+      await deletePost(deleteConfirm.post.id);
       setDeleteConfirm({ isOpen: false, post: null });
-      await loadPosts();
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : "Failed to delete blog post";
@@ -208,86 +181,86 @@ const BlogsManagePage = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">
-            Blog Post Management
-          </h1>
-          <p className="text-sm text-gray-600 mt-1">
-            Create and manage blog posts, articles, and content
-          </p>
-        </div>
-        {!showForm && (
-          <div className="flex gap-3">
-            <button
-              onClick={() => setShowUnpublished(!showUnpublished)}
-              className={`px-4 py-2 rounded border transition-colors ${
-                showUnpublished
-                  ? "bg-gray-100 border-gray-300 text-gray-700"
-                  : "border-gray-300 text-gray-700 hover:bg-gray-50"
-              }`}
-            >
-              {showUnpublished ? "Hide Drafts" : "Show Drafts"}
-            </button>
-            <button
+      <PageHeader
+        title="Blog Post Management"
+        description="Create and manage blog posts, articles, and content with advanced search and filters"
+        actionButton={
+          !showForm && (
+            <CreateBlogPostButton
               onClick={handleCreate}
               disabled={categoriesLoading || categories.length === 0}
-              className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               title={
                 categories.length === 0
                   ? "Please create a blog category first"
                   : "Create new blog post"
               }
-            >
-              + Create Post
-            </button>
-          </div>
-        )}
-      </div>
+            />
+          )
+        }
+      />
 
       {/* Messages */}
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-          {error}
-        </div>
+        <AlertMessage
+          type="error"
+          message={error}
+          onDismiss={() => setError(null)}
+        />
       )}
       {success && (
-        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded">
-          {success}
-        </div>
+        <AlertMessage
+          type="success"
+          message={success}
+          onDismiss={() => setSuccess(null)}
+        />
       )}
-
       {categoriesLoading && (
-        <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded">
-          Loading blog categories...
-        </div>
+        <AlertMessage type="info" message="Loading blog categories..." />
       )}
-
       {!categoriesLoading && categories.length === 0 && (
-        <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-3 rounded">
-          No blog categories found. Please create a blog category first before
-          adding posts.
-        </div>
+        <AlertMessage
+          type="warning"
+          message={
+            <>
+              <strong>No blog categories found.</strong> Please create a blog
+              category first before adding posts.
+            </>
+          }
+        />
       )}
 
       {/* Form or Table */}
       {showForm ? (
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            {editingPost ? "Edit Blog Post" : "Create New Blog Post"}
-          </h2>
-          <BlogPostForm
-            post={editingPost}
-            categories={categories}
-            onSubmit={handleFormSubmit}
-            onCancel={handleFormCancel}
-            loading={formLoading}
-          />
-        </div>
+        <BlogPostFormWrapper
+          editingPost={editingPost}
+          categories={categories}
+          onSubmit={handleFormSubmit}
+          onCancel={handleFormCancel}
+          loading={formLoading}
+        />
       ) : (
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+          {/* Search and Filter */}
+          <div className="mb-6">
+            <BlogSearchAndFilter
+              searchQuery={filters.searchQuery}
+              selectedCategory={filters.selectedCategory}
+              publishStatus={filters.publishStatus}
+              sortBy={filters.sortBy}
+              sortOrder={filters.sortOrder}
+              categories={categories}
+              onSearchChange={setSearchQuery}
+              onCategoryChange={setSelectedCategory}
+              onPublishStatusChange={setPublishStatus}
+              onSortChange={setSortBy}
+              onClearFilters={clearFilters}
+              resultCount={filteredPosts.length}
+            />
+          </div>
+
+          {/* Blog Post Table */}
           <BlogPostTable
-            posts={posts}
+            posts={filteredPosts}
             onEdit={handleEdit}
             onDelete={handleDeleteClick}
             onTogglePublish={handleTogglePublish}

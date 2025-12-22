@@ -1,31 +1,57 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { productService, categoryService } from "@/service/services";
+import { productService } from "@/service/services";
 import type {
   ProductResponseDto,
   ProductListItemDto,
   CreateProductDto,
   UpdateProductDto,
 } from "@/types/product.types";
-import type { CategoryResponseDto } from "@/types/category.types";
 import ProductTable from "./_components/ProductTable";
-import ProductForm from "./_components/ProductForm";
 import ConfirmModal from "./_components/ConfirmModal";
+import SearchAndFilter from "./_components/SearchAndFilter";
+import AlertMessage from "./_components/AlertMessage";
+import PageHeader from "./_components/PageHeader";
+import ProductFormWrapper from "./_components/ProductFormWrapper";
+import CreateProductButton from "./_components/CreateProductButton";
+import { useProducts } from "./_hooks/useProducts";
+import { useProductFilters } from "./_hooks/useProductFilters";
 
 const ProductsManagePage = () => {
-  const [products, setProducts] = useState<ProductListItemDto[]>([]);
-  const [categories, setCategories] = useState<CategoryResponseDto[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [categoriesLoading, setCategoriesLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-  const [showInactive, setShowInactive] = useState(false);
+  // Data management hooks
+  const {
+    products,
+    categories,
+    loading,
+    categoriesLoading,
+    error,
+    success,
+    showInactive,
+    setError,
+    setSuccess,
+    setShowInactive,
+    createProduct,
+    updateProduct,
+    deleteProduct,
+  } = useProducts();
+
+  // Filtering hook
+  const {
+    filters,
+    filteredProducts,
+    setSearchQuery,
+    setSelectedCategory,
+    setPriceRange,
+    setSortBy,
+    clearFilters,
+  } = useProductFilters(products, categories);
 
   // Form state
   const [showForm, setShowForm] = useState(false);
   const [editingProduct, setEditingProduct] =
     useState<ProductResponseDto | null>(null);
+  const [formLoading, setFormLoading] = useState(false);
 
   // Delete confirmation state
   const [deleteConfirm, setDeleteConfirm] = useState<{
@@ -35,47 +61,8 @@ const ProductsManagePage = () => {
     isOpen: false,
     product: null,
   });
-
-  const [formLoading, setFormLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
-  // Load products
-  const loadProducts = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await productService.getAllProducts(showInactive);
-      setProducts(data);
-    } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Failed to load products";
-      setError(errorMessage);
-      console.error("Error loading products:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // Load categories
-  const loadCategories = async () => {
-    try {
-      setCategoriesLoading(true);
-      const data = await categoryService.getAllCategories();
-      setCategories(data);
-    } catch (err: unknown) {
-      console.error("Error loading categories:", err);
-    } finally {
-      setCategoriesLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadCategories();
-  }, []);
-
-  useEffect(() => {
-    loadProducts();
-  }, [showInactive]);
 
   // Handle create/edit
   const handleCreate = () => {
@@ -114,21 +101,13 @@ const ProductsManagePage = () => {
       setError(null);
 
       if (editingProduct) {
-        // Update existing product
-        await productService.updateProduct(
-          editingProduct.id,
-          data as UpdateProductDto
-        );
-        setSuccess("Product updated successfully!");
+        await updateProduct(editingProduct.id, data as UpdateProductDto);
       } else {
-        // Create new product
-        await productService.createProduct(data as CreateProductDto);
-        setSuccess("Product created successfully!");
+        await createProduct(data as CreateProductDto);
       }
 
       setShowForm(false);
       setEditingProduct(null);
-      await loadProducts();
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : "Failed to save product";
@@ -159,11 +138,8 @@ const ProductsManagePage = () => {
     try {
       setDeleteLoading(true);
       setError(null);
-
-      await productService.deleteProduct(deleteConfirm.product.id);
-      setSuccess("Product deleted successfully!");
+      await deleteProduct(deleteConfirm.product.id);
       setDeleteConfirm({ isOpen: false, product: null });
-      await loadProducts();
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : "Failed to delete product";
@@ -178,6 +154,7 @@ const ProductsManagePage = () => {
     setDeleteConfirm({ isOpen: false, product: null });
   };
 
+
   // Auto-hide success message
   useEffect(() => {
     if (success) {
@@ -189,85 +166,84 @@ const ProductsManagePage = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">
-            Product Management
-          </h1>
-          <p className="text-sm text-gray-600 mt-1">
-            Manage products, pricing, and inventory
-          </p>
-        </div>
-        {!showForm && (
-          <div className="flex gap-3">
-            <button
-              onClick={() => setShowInactive(!showInactive)}
-              className={`px-4 py-2 rounded border transition-colors ${
-                showInactive
-                  ? "bg-gray-100 border-gray-300 text-gray-700"
-                  : "border-gray-300 text-gray-700 hover:bg-gray-50"
-              }`}
-            >
-              {showInactive ? "Hide Inactive" : "Show Inactive"}
-            </button>
-            <button
+      <PageHeader
+        title="Product Management"
+        description="Manage products, pricing, and inventory with advanced search and filters"
+        actionButton={
+          !showForm && (
+            <CreateProductButton
               onClick={handleCreate}
               disabled={categoriesLoading || categories.length === 0}
-              className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
               title={
                 categories.length === 0
                   ? "Please create a category first"
                   : "Create new product"
               }
-            >
-              + Create Product
-            </button>
-          </div>
-        )}
-      </div>
+            />
+          )
+        }
+      />
 
       {/* Messages */}
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-          {error}
-        </div>
+        <AlertMessage type="error" message={error} onDismiss={() => setError(null)} />
       )}
       {success && (
-        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded">
-          {success}
-        </div>
+        <AlertMessage
+          type="success"
+          message={success}
+          onDismiss={() => setSuccess(null)}
+        />
       )}
-
       {categoriesLoading && (
-        <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded">
-          Loading categories...
-        </div>
+        <AlertMessage type="info" message="Loading categories..." />
       )}
-
       {!categoriesLoading && categories.length === 0 && (
-        <div className="bg-yellow-50 border border-yellow-200 text-yellow-700 px-4 py-3 rounded">
-          No categories found. Please create a category first before adding products.
-        </div>
+        <AlertMessage
+          type="warning"
+          message={
+            <>
+              <strong>No categories found.</strong> Please create a category first
+              before adding products.
+            </>
+          }
+        />
       )}
 
       {/* Form or Table */}
       {showForm ? (
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            {editingProduct ? "Edit Product" : "Create New Product"}
-          </h2>
-          <ProductForm
-            product={editingProduct}
-            categories={categories}
-            onSubmit={handleFormSubmit}
-            onCancel={handleFormCancel}
-            loading={formLoading}
-          />
-        </div>
+        <ProductFormWrapper
+          editingProduct={editingProduct}
+          categories={categories}
+          onSubmit={handleFormSubmit}
+          onCancel={handleFormCancel}
+          loading={formLoading}
+        />
       ) : (
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+          {/* Search and Filter */}
+          <div className="mb-6">
+            <SearchAndFilter
+              searchQuery={filters.searchQuery}
+              selectedCategory={filters.selectedCategory}
+              priceRange={filters.priceRange}
+              sortBy={filters.sortBy}
+              sortOrder={filters.sortOrder}
+              showInactive={showInactive}
+              categories={categories}
+              onSearchChange={setSearchQuery}
+              onCategoryChange={setSelectedCategory}
+              onPriceRangeChange={setPriceRange}
+              onSortChange={setSortBy}
+              onToggleInactive={() => setShowInactive(!showInactive)}
+              onClearFilters={clearFilters}
+              resultCount={filteredProducts.length}
+            />
+          </div>
+
+          {/* Product Table */}
           <ProductTable
-            products={products}
+            products={filteredProducts}
             onEdit={handleEdit}
             onDelete={handleDeleteClick}
             loading={loading}

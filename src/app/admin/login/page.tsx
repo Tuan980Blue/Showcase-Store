@@ -18,7 +18,7 @@ const LoginPage = () => {
     setError(null);
     try {
       await authService.login({ username, password });
-      router.push("/admin/products");
+      router.push("/admin");
     } catch (err) {
       const message =
         err instanceof ApiError ? err.message : "Login failed. Please try again.";
