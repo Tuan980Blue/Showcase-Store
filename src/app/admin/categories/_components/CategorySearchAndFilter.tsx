@@ -105,12 +105,12 @@ const CategorySearchAndFilter: React.FC<CategorySearchAndFilterProps> = ({
             Filters
             {hasActiveFilters && (
               <span className="ml-1 px-1.5 py-0.5 text-xs font-semibold bg-blue-600 text-white rounded-full">
-                {[
+                {([
                   searchQuery && 1,
                   productCountFilter !== "all" && 1,
                   sortBy !== "name" && 1,
                 ]
-                  .filter(Boolean)
+                  .filter(Boolean) as number[])
                   .reduce((a, b) => a + b, 0)}
               </span>
             )}
