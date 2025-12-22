@@ -60,7 +60,7 @@ const BlogPostsByCategoryChart: React.FC<BlogPostsByCategoryChartProps> = ({
             cy="50%"
             labelLine={false}
             label={({ name, percent }) =>
-              `${name ?? "Unknown"}: ${(percent * 100).toFixed(0)}%`
+              `${name ?? "Unknown"}: ${((percent ?? 0) * 100).toFixed(0)}%`
             }
             outerRadius={80}
             fill="#8884d8"
@@ -74,7 +74,7 @@ const BlogPostsByCategoryChart: React.FC<BlogPostsByCategoryChartProps> = ({
             ))}
           </Pie>
           <Tooltip
-            formatter={(value: number) => [`${value} posts`, "Count"]}
+            formatter={(value: number | undefined) => [`${value ?? 0} posts`, "Count"]}
           />
           <Legend />
         </PieChart>
