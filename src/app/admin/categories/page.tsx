@@ -1,26 +1,50 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { categoryService } from "@/service/services";
 import type {
   CategoryResponseDto,
   CreateCategoryDto,
   UpdateCategoryDto,
 } from "@/types/category.types";
 import CategoryTable from "./_components/CategoryTable";
-import CategoryForm from "./_components/CategoryForm";
 import ConfirmModal from "./_components/ConfirmModal";
+import AlertMessage from "./_components/AlertMessage";
+import PageHeader from "./_components/PageHeader";
+import CategoryFormWrapper from "./_components/CategoryFormWrapper";
+import CreateCategoryButton from "./_components/CreateCategoryButton";
+import CategorySearchAndFilter from "./_components/CategorySearchAndFilter";
+import { useCategories } from "./_hooks/useCategories";
+import { useCategoryFilters } from "./_hooks/useCategoryFilters";
 
 const CategoriesManagePage = () => {
-  const [categories, setCategories] = useState<CategoryResponseDto[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
+  // Data management hook
+  const {
+    categories,
+    loading,
+    error,
+    success,
+    setError,
+    setSuccess,
+    createCategory,
+    updateCategory,
+    deleteCategory,
+  } = useCategories();
+
+  // Filtering hook
+  const {
+    filters,
+    filteredCategories,
+    setSearchQuery,
+    setSortBy,
+    setProductCountFilter,
+    clearFilters,
+  } = useCategoryFilters(categories);
 
   // Form state
   const [showForm, setShowForm] = useState(false);
   const [editingCategory, setEditingCategory] =
     useState<CategoryResponseDto | null>(null);
+  const [formLoading, setFormLoading] = useState(false);
 
   // Delete confirmation state
   const [deleteConfirm, setDeleteConfirm] = useState<{
@@ -30,30 +54,7 @@ const CategoriesManagePage = () => {
     isOpen: false,
     category: null,
   });
-
-  const [formLoading, setFormLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
-
-  // Load categories
-  const loadCategories = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await categoryService.getAllCategories();
-      setCategories(data);
-    } catch (err: unknown) {
-      const errorMessage =
-        err instanceof Error ? err.message : "Failed to load categories";
-      setError(errorMessage);
-      console.error("Error loading categories:", err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadCategories();
-  }, []);
 
   // Handle create/edit
   const handleCreate = () => {
@@ -78,18 +79,13 @@ const CategoriesManagePage = () => {
       setError(null);
 
       if (editingCategory) {
-        // Update existing category
-        await categoryService.updateCategory(editingCategory.id, data as UpdateCategoryDto);
-        setSuccess("Category updated successfully!");
+        await updateCategory(editingCategory.id, data as UpdateCategoryDto);
       } else {
-        // Create new category
-        await categoryService.createBulkCategories([data as CreateCategoryDto]);
-        setSuccess("Category created successfully!");
+        await createCategory(data as CreateCategoryDto);
       }
 
       setShowForm(false);
       setEditingCategory(null);
-      await loadCategories();
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : "Failed to save category";
@@ -120,11 +116,8 @@ const CategoriesManagePage = () => {
     try {
       setDeleteLoading(true);
       setError(null);
-
-      await categoryService.deleteCategory(deleteConfirm.category.id);
-      setSuccess("Category deleted successfully!");
+      await deleteCategory(deleteConfirm.category.id);
       setDeleteConfirm({ isOpen: false, category: null });
-      await loadCategories();
     } catch (err: unknown) {
       const errorMessage =
         err instanceof Error ? err.message : "Failed to delete category";
@@ -150,54 +143,60 @@ const CategoriesManagePage = () => {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">
-            Category Management
-          </h1>
-          <p className="text-sm text-gray-600 mt-1">
-            Manage product categories and their SEO settings
-          </p>
-        </div>
-        {!showForm && (
-          <button
-            onClick={handleCreate}
-            className="px-4 py-2 rounded bg-blue-600 text-white hover:bg-blue-700 transition-colors"
-          >
-            + Create Category
-          </button>
-        )}
-      </div>
+      <PageHeader
+        title="Category Management"
+        description="Manage product categories and their SEO settings"
+        actionButton={
+          !showForm && (
+            <CreateCategoryButton onClick={handleCreate} />
+          )
+        }
+      />
 
       {/* Messages */}
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded">
-          {error}
-        </div>
+        <AlertMessage
+          type="error"
+          message={error}
+          onDismiss={() => setError(null)}
+        />
       )}
       {success && (
-        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded">
-          {success}
-        </div>
+        <AlertMessage
+          type="success"
+          message={success}
+          onDismiss={() => setSuccess(null)}
+        />
       )}
 
       {/* Form or Table */}
       {showForm ? (
-        <div className="bg-white rounded-lg shadow p-6">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            {editingCategory ? "Edit Category" : "Create New Category"}
-          </h2>
-          <CategoryForm
-            category={editingCategory}
-            onSubmit={handleFormSubmit}
-            onCancel={handleFormCancel}
-            loading={formLoading}
-          />
-        </div>
+        <CategoryFormWrapper
+          editingCategory={editingCategory}
+          onSubmit={handleFormSubmit}
+          onCancel={handleFormCancel}
+          loading={formLoading}
+        />
       ) : (
-        <div className="bg-white rounded-lg shadow p-6">
+        <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+          {/* Search and Filter */}
+          <div className="mb-6">
+            <CategorySearchAndFilter
+              searchQuery={filters.searchQuery}
+              sortBy={filters.sortBy}
+              sortOrder={filters.sortOrder}
+              productCountFilter={filters.productCountFilter}
+              onSearchChange={setSearchQuery}
+              onSortChange={setSortBy}
+              onProductCountFilterChange={setProductCountFilter}
+              onClearFilters={clearFilters}
+              resultCount={filteredCategories.length}
+            />
+          </div>
+
+          {/* Category Table */}
           <CategoryTable
-            categories={categories}
+            categories={filteredCategories}
             onEdit={handleEdit}
             onDelete={handleDeleteClick}
             loading={loading}
