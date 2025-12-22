@@ -5,13 +5,20 @@ import {useEffect, useRef, useState} from "react";
 import Image from "next/image";
 import { HiHome, HiShoppingBag, HiViewGrid, HiBookOpen, HiMail, HiInformationCircle, HiChevronDown } from "react-icons/hi";
 import "@/styles/santa-animations.css";
+import { usePublicCategories } from "@/app/(site)/_hooks";
 
 const Navbar = () => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [isMainNavFixed, setIsMainNavFixed] = useState(false);
+    const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
     const headerRef = useRef<HTMLDivElement | null>(null);
     const bottomNavRef = useRef<HTMLDivElement | null>(null);
+    const {
+        categories,
+        loading: categoriesLoading,
+        error: categoriesError,
+        reload: reloadCategories,
+    } = usePublicCategories();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -37,14 +44,14 @@ const Navbar = () => {
         {id: 'home', label: 'TRANG CHỦ', path: '/', icon: HiHome},
         {id: 'products', label: 'TẤT CẢ SẢN PHẨM', path: '/products', icon: HiShoppingBag},
         {id: 'categories', label: 'DANH MỤC', path: '/categories', hasDropdown: true, icon: HiViewGrid},
-        {id: 'blog', label: 'BLOG HƯỚNG DẪN KỸ THUẬT', path: '/blog', hasDropdown: true, icon: HiBookOpen},
+        {id: 'blog', label: 'BLOG HƯỚNG DẪN KỸ THUẬT', path: '/blog', icon: HiBookOpen},
         {id: 'contact', label: 'DỊCH VỤ', path: '/about', icon: HiMail},
         {id: 'about', label: 'GIỚI THIỆU', path: '/about', icon: HiInformationCircle},
     ];
 
     return (
         <nav
-                className="relative shadow-lg overflow-hidden"
+                className="relative shadow-lg overflow-visible"
                 ref={headerRef}
                 style={{ backgroundColor: "var(--bg-light)", color: "var(--text-dark)" }}
             >
@@ -171,7 +178,7 @@ const Navbar = () => {
                             <div className="flex flex-col">
                                 <Link
                                     href="/"
-                                    className="text-sm sm:text-lg md:text-xl font-bold leading-tight transition-all duration-200 hover:text-opacity-70"
+                                    className="text-sm sm:text-lg font-bold leading-tight transition-all duration-200 hover:text-opacity-70"
                                     style={{
                                         color: "var(--brand-navy)",
                                         textTransform: "uppercase",
@@ -309,23 +316,93 @@ const Navbar = () => {
                         {navItems.map((item) => {
                             const IconComponent = item.icon;
                             return (
-                                <Link
+                                <div
                                     key={item.id}
-                                    href={item.path}
-                                    className="flex items-center gap-0 sm:gap-1 lg:gap-2 transition-colors font-medium hover:opacity-80"
-                                    style={{ color: "var(--text-inverse)" }}
+                                    className="relative"
+                                    onMouseEnter={() => item.hasDropdown && setActiveDropdown(item.id)}
+                                    onMouseLeave={() => item.hasDropdown && setActiveDropdown(null)}
                                 >
-                                    {IconComponent && (
-                                        <IconComponent 
-                                            className="w-3 h-3 lg:w-5 lg:h-5 flex-shrink-0"
-                                            style={{ color: "var(--icon-main)" }}
-                                        />
+                                    <Link
+                                        href={item.path}
+                                        className="flex items-center gap-0 sm:gap-1 lg:gap-2 transition-colors font-medium hover:opacity-80"
+                                        style={{ color: "var(--text-inverse)" }}
+                                    >
+                                        {IconComponent && (
+                                            <IconComponent 
+                                                className="w-3 h-3 lg:w-5 lg:h-5 flex-shrink-0"
+                                                style={{ color: "var(--icon-main)" }}
+                                            />
+                                        )}
+                                        <span className="text-[5px] sm:text-[10px] lg:text-[12px] xl:text-base">{item.label}</span>
+                                        {item.hasDropdown && (
+                                            <HiChevronDown className="w-3 h-3 lg:w-5 lg:h-5 flex-shrink-0" />
+                                        )}
+                                    </Link>
+
+                                    {item.id === "categories" && (
+                                        <div
+                                            className={`absolute left-1/2 z-[70] mt-2 w-max -translate-x-1/2 rounded-lg border bg-white text-slate-800 shadow-xl transition-all duration-200 ${
+                                                activeDropdown === item.id
+                                                    ? "visible opacity-100 translate-y-0"
+                                                    : "invisible opacity-0 -translate-y-1"
+                                            }`}
+                                            style={{ borderColor: "var(--border-light)" }}
+                                        >
+                                            <div className="px-3 py-2 border-b text-xs font-semibold uppercase tracking-wide text-slate-600"
+                                                 style={{ borderColor: "var(--border-light)" }}>
+                                                Danh mục sản phẩm
+                                            </div>
+
+                                            <div className="max-h-72 overflow-auto">
+                                                {categoriesLoading && (
+                                                    <p className="px-3 py-2 text-xs text-slate-500">
+                                                        Đang tải danh mục...
+                                                    </p>
+                                                )}
+
+                                                {categoriesError && !categoriesLoading && (
+                                                    <div className="px-3 py-2 text-xs text-red-600 space-y-1">
+                                                        <p>Không thể tải danh mục.</p>
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => reloadCategories()}
+                                                            className="text-[11px] font-semibold text-[var(--brand-navy)] hover:underline"
+                                                        >
+                                                            Thử lại
+                                                        </button>
+                                                    </div>
+                                                )}
+
+                                                {!categoriesLoading && !categoriesError && categories.length === 0 && (
+                                                    <p className="px-3 py-2 text-xs text-slate-500">
+                                                        Chưa có danh mục.
+                                                    </p>
+                                                )}
+
+                                                {!categoriesLoading && !categoriesError && categories.length > 0 && (
+                                                    <ul className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-0.5 py-1">
+                                                        {categories.map((category) => (
+                                                            <li key={category.id}>
+                                                                <Link
+                                                                    href={`/?category=${category.slug}`}
+                                                                    className="flex items-center justify-between gap-2 px-3 py-2 text-xs hover:bg-slate-100 transition-colors rounded"
+                                                                    onClick={() => setActiveDropdown(null)}
+                                                                >
+                                                                    <span className="text-slate-800 line-clamp-1">{category.name}</span>
+                                                                    {typeof category.productCount === "number" && (
+                                                                        <span className="ml-2 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] text-slate-600">
+                                                                            {category.productCount}
+                                                                        </span>
+                                                                    )}
+                                                                </Link>
+                                                            </li>
+                                                        ))}
+                                                    </ul>
+                                                )}
+                                            </div>
+                                        </div>
                                     )}
-                                    <span className="text-[5px] sm:text-[10px] lg:text-[12px] xl:text-base">{item.label}</span>
-                                    {item.hasDropdown && (
-                                        <HiChevronDown className="w-3 h-3 lg:w-5 lg:h-5 flex-shrink-0" />
-                                    )}
-                                </Link>
+                                </div>
                             );
                         })}
                     </div>
