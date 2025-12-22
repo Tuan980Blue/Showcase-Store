@@ -7,7 +7,7 @@ export const API_ENDPOINTS = {
     LOGOUT: '/auth/logout',
   },
   PRODUCTS: {
-    BASE: '/api/products',
+    BASE: '/products',
     BY_ID: (id: string) => `/products/${id}`,
     BY_SLUG: (slug: string) => `/products/slug/${slug}`,
     BULK: '/products/bulk',

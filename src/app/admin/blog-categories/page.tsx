@@ -1,18 +1,18 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { categoryService } from "@/service/services";
+import { blogCategoryService } from "@/service/services";
 import type {
-  CategoryResponseDto,
-  CreateCategoryDto,
-  UpdateCategoryDto,
-} from "@/types/category.types";
-import CategoryTable from "./_components/CategoryTable";
-import CategoryForm from "./_components/CategoryForm";
+  BlogCategoryResponseDto,
+  CreateBlogCategoryDto,
+  UpdateBlogCategoryDto,
+} from "@/types/blog.types";
+import BlogCategoryTable from "./_components/BlogCategoryTable";
+import BlogCategoryForm from "./_components/BlogCategoryForm";
 import ConfirmModal from "./_components/ConfirmModal";
 
-const CategoriesManagePage = () => {
-  const [categories, setCategories] = useState<CategoryResponseDto[]>([]);
+const BlogCategoriesManagePage = () => {
+  const [categories, setCategories] = useState<BlogCategoryResponseDto[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -20,12 +20,12 @@ const CategoriesManagePage = () => {
   // Form state
   const [showForm, setShowForm] = useState(false);
   const [editingCategory, setEditingCategory] =
-    useState<CategoryResponseDto | null>(null);
+    useState<BlogCategoryResponseDto | null>(null);
 
   // Delete confirmation state
   const [deleteConfirm, setDeleteConfirm] = useState<{
     isOpen: boolean;
-    category: CategoryResponseDto | null;
+    category: BlogCategoryResponseDto | null;
   }>({
     isOpen: false,
     category: null,
@@ -39,13 +39,13 @@ const CategoriesManagePage = () => {
     try {
       setLoading(true);
       setError(null);
-      const data = await categoryService.getAllCategories();
+      const data = await blogCategoryService.getAllCategories();
       setCategories(data);
     } catch (err: unknown) {
       const errorMessage =
-        err instanceof Error ? err.message : "Failed to load categories";
+        err instanceof Error ? err.message : "Failed to load blog categories";
       setError(errorMessage);
-      console.error("Error loading categories:", err);
+      console.error("Error loading blog categories:", err);
     } finally {
       setLoading(false);
     }
@@ -63,7 +63,7 @@ const CategoriesManagePage = () => {
     setSuccess(null);
   };
 
-  const handleEdit = (category: CategoryResponseDto) => {
+  const handleEdit = (category: BlogCategoryResponseDto) => {
     setEditingCategory(category);
     setShowForm(true);
     setError(null);
@@ -71,7 +71,7 @@ const CategoriesManagePage = () => {
   };
 
   const handleFormSubmit = async (
-    data: CreateCategoryDto | UpdateCategoryDto
+    data: CreateBlogCategoryDto | UpdateBlogCategoryDto
   ) => {
     try {
       setFormLoading(true);
@@ -79,12 +79,15 @@ const CategoriesManagePage = () => {
 
       if (editingCategory) {
         // Update existing category
-        await categoryService.updateCategory(editingCategory.id, data as UpdateCategoryDto);
-        setSuccess("Category updated successfully!");
+        await blogCategoryService.updateCategory(
+          editingCategory.id,
+          data as UpdateBlogCategoryDto
+        );
+        setSuccess("Blog category updated successfully!");
       } else {
         // Create new category
-        await categoryService.createBulkCategories([data as CreateCategoryDto]);
-        setSuccess("Category created successfully!");
+        await blogCategoryService.createCategory(data as CreateBlogCategoryDto);
+        setSuccess("Blog category created successfully!");
       }
 
       setShowForm(false);
@@ -92,9 +95,9 @@ const CategoriesManagePage = () => {
       await loadCategories();
     } catch (err: unknown) {
       const errorMessage =
-        err instanceof Error ? err.message : "Failed to save category";
+        err instanceof Error ? err.message : "Failed to save blog category";
       setError(errorMessage);
-      console.error("Error saving category:", err);
+      console.error("Error saving blog category:", err);
     } finally {
       setFormLoading(false);
     }
@@ -107,7 +110,7 @@ const CategoriesManagePage = () => {
   };
 
   // Handle delete
-  const handleDeleteClick = (category: CategoryResponseDto) => {
+  const handleDeleteClick = (category: BlogCategoryResponseDto) => {
     setDeleteConfirm({
       isOpen: true,
       category,
@@ -121,15 +124,17 @@ const CategoriesManagePage = () => {
       setDeleteLoading(true);
       setError(null);
 
-      await categoryService.deleteCategory(deleteConfirm.category.id);
-      setSuccess("Category deleted successfully!");
+      await blogCategoryService.deleteCategory(deleteConfirm.category.id);
+      setSuccess("Blog category deleted successfully!");
       setDeleteConfirm({ isOpen: false, category: null });
       await loadCategories();
     } catch (err: unknown) {
       const errorMessage =
-        err instanceof Error ? err.message : "Failed to delete category";
+        err instanceof Error
+          ? err.message
+          : "Failed to delete blog category";
       setError(errorMessage);
-      console.error("Error deleting category:", err);
+      console.error("Error deleting blog category:", err);
     } finally {
       setDeleteLoading(false);
     }
@@ -153,10 +158,10 @@ const CategoriesManagePage = () => {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">
-            Category Management
+            Blog Category Management
           </h1>
           <p className="text-sm text-gray-600 mt-1">
-            Manage product categories and their SEO settings
+            Manage blog categories and organize your content
           </p>
         </div>
         {!showForm && (
@@ -185,9 +190,9 @@ const CategoriesManagePage = () => {
       {showForm ? (
         <div className="bg-white rounded-lg shadow p-6">
           <h2 className="text-xl font-semibold text-gray-900 mb-4">
-            {editingCategory ? "Edit Category" : "Create New Category"}
+            {editingCategory ? "Edit Blog Category" : "Create New Blog Category"}
           </h2>
-          <CategoryForm
+          <BlogCategoryForm
             category={editingCategory}
             onSubmit={handleFormSubmit}
             onCancel={handleFormCancel}
@@ -196,7 +201,7 @@ const CategoriesManagePage = () => {
         </div>
       ) : (
         <div className="bg-white rounded-lg shadow p-6">
-          <CategoryTable
+          <BlogCategoryTable
             categories={categories}
             onEdit={handleEdit}
             onDelete={handleDeleteClick}
@@ -208,12 +213,12 @@ const CategoriesManagePage = () => {
       {/* Delete Confirmation Modal */}
       <ConfirmModal
         isOpen={deleteConfirm.isOpen}
-        title="Delete Category"
+        title="Delete Blog Category"
         message={
           deleteConfirm.category
             ? `Are you sure you want to delete "${deleteConfirm.category.name}"? This action cannot be undone.${
-                deleteConfirm.category.productCount > 0
-                  ? `\n\nNote: This category has ${deleteConfirm.category.productCount} product(s) and cannot be deleted.`
+                deleteConfirm.category.blogPostCount > 0
+                  ? `\n\nNote: This category has ${deleteConfirm.category.blogPostCount} blog post(s) and cannot be deleted.`
                   : ""
               }`
             : ""
@@ -229,4 +234,5 @@ const CategoriesManagePage = () => {
   );
 };
 
-export default CategoriesManagePage;
+export default BlogCategoriesManagePage;
+
