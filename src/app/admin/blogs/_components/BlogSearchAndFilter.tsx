@@ -120,7 +120,7 @@ const BlogSearchAndFilter: React.FC<BlogSearchAndFilterProps> = ({
                   sortBy !== "created" && 1,
                 ]
                   .filter(Boolean)
-                  .reduce((a, b) => a + b, 0)}
+                  .reduce((a: number, b: number) => a + b, 0)}
               </span>
             )}
           </button>
