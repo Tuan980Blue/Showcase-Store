@@ -6,9 +6,9 @@ import Image from "next/image";
 import { HiHome, HiShoppingBag, HiViewGrid, HiBookOpen, HiMail, HiInformationCircle, HiChevronDown } from "react-icons/hi";
 import "@/styles/santa-animations.css";
 import { usePublicCategories } from "@/app/(site)/_hooks";
+import SearchBar from "./SearchBar";
 
 const Navbar = () => {
-    const [searchQuery, setSearchQuery] = useState('');
     const [isMainNavFixed, setIsMainNavFixed] = useState(false);
     const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
     const headerRef = useRef<HTMLDivElement | null>(null);
@@ -33,12 +33,6 @@ const Navbar = () => {
             window.removeEventListener('scroll', handleScroll);
         };
     }, []);
-
-    const handleSearch = (e: React.FormEvent) => {
-        e.preventDefault();
-        // Handle search logic here
-        console.log('Searching for:', searchQuery);
-    };
 
     const navItems = [
         {id: 'home', label: 'TRANG CHỦ', path: '/', icon: HiHome},
@@ -204,48 +198,8 @@ const Navbar = () => {
                         </div>
 
                         {/* Middle - Search Bar */}
-                        <div className="flex-1 w-full lg:max-w-2xl">
-                            <form onSubmit={handleSearch} className="flex">
-                                <div className="flex-1 relative">
-                                    <input
-                                        type="text"
-                                        value={searchQuery}
-                                        onChange={(e) => setSearchQuery(e.target.value)}
-                                        placeholder="Tìm kiếm sản phẩm..."
-                                        className="w-full px-4 py-2 pl-10 border rounded focus:outline-none"
-                                        style={{
-                                            borderColor: "var(--border-light)",
-                                            color: "var(--text-dark)",
-                                            backgroundColor: "var(--bg-mint)",
-                                        }}
-                                    />
-                                    <svg
-                                        className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                        style={{ color: "var(--text-light)" }}
-                                    >
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                                    </svg>
-                                </div>
-                                <button
-                                    type="submit"
-                                    className="px-6 py-2 rounded transition-colors font-medium"
-                                    style={{
-                                        backgroundColor: "var(--btn-primary)",
-                                        color: "var(--text-inverse)",
-                                    }}
-                                >
-                                    Tìm kiếm
-                                </button>
-                            </form>
-                            <p
-                                className="text-xs mt-1 italic"
-                                style={{ color: "var(--text-light)" }}
-                            >
-                                Tìm sản phẩm: Đèn, Chuột, Máy đo huyết áp, Camera...
-                            </p>
+                        <div className={"flex-1 w-full lg:max-w-2xl"}>
+                            <SearchBar />
                         </div>
 
                         {/* Right - Action Icons */}

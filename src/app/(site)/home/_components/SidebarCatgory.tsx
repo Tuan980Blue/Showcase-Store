@@ -38,7 +38,7 @@ const SidebarCatgory: React.FC<SidebarCategoryProps> = ({
 
   return (
     <div
-      className="rounded-lg border p-3 sm:p-4 shadow-sm lg:max-h-[calc(100vh-160px)] lg:overflow-auto"
+      className="rounded-lg border p-3 sm:p-4 shadow-sm lg:max-h-[calc(100vh-100px)] lg:overflow-auto"
       style={{
         backgroundColor: 'var(--bg-light)',
         color: 'var(--text-dark)',

@@ -35,16 +35,18 @@ const HomeContentPage: React.FC = () => {
             style={{ backgroundColor: 'var(--bg-light)', color: 'var(--text-dark)' }}
         >
             {/* Hero / Top section */}
-            <HeroSection
-                products={products}
-                loading={productsLoading}
-            />
+            <div className={"container mx-auto"}>
+                <HeroSection
+                    products={products}
+                    loading={productsLoading}
+                />
+            </div>
 
             {/* Main content grid: sidebar + product showcase */}
             <div className="container mx-auto px-2 sm:px-4 lg:px-6 py-4 lg:py-8">
                 <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-6">
                     {/* Sidebar: categories, quick links, simple hints */}
-                    <aside className="lg:block hidden lg:sticky lg:top-24 self-start lg:col-span-3 xl:col-span-3">
+                    <aside className="lg:block hidden lg:sticky lg:top-16 self-start lg:col-span-3 xl:col-span-3">
                         <SidebarCatgory
                             categories={categories}
                             loading={categoriesLoading}
