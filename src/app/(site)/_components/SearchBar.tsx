@@ -14,11 +14,12 @@ const SearchBar = () => {
     const [isFocused, setIsFocused] = useState(false);
     const [clickedOutside, setClickedOutside] = useState(false);
     const searchContainerRef = useRef<HTMLDivElement>(null);
-    const { search, results, loading, error, clear } = useProductSearch();
+    const { search, results, loading, error, clear, query } = useProductSearch();
 
     // Derive showResults from state instead of using useEffect
     const hasSearchContent = searchQuery.trim().length > 0;
-    const hasSearchState = results.length > 0 || loading || error;
+    const hasSearched = query.trim().length > 0;
+    const hasSearchState = results.length > 0 || loading || error || hasSearched;
     const showResults = isFocused && !clickedOutside && hasSearchContent && hasSearchState;
 
     // Handle click outside to close dropdown
@@ -60,7 +61,7 @@ const SearchBar = () => {
                 }
             };
             performSearch();
-        }, 500);
+        }, 900);
 
         // Cleanup: clear timer if user types again before delay completes
         return () => {
@@ -137,6 +138,7 @@ const SearchBar = () => {
                             results={results}
                             loading={loading}
                             error={error}
+                            query={query}
                             onClose={handleResultClick}
                         />
                     )}
@@ -150,7 +152,7 @@ const SearchBar = () => {
                     }}
                     disabled={loading || !searchQuery.trim()}
                 >
-                    {loading ? "Đang tìm..." : "Tìm kiếm"}
+                    {"Tìm kiếm"}
                 </button>
             </form>
             <p

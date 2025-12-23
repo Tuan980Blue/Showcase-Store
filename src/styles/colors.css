@@ -1,86 +1,44 @@
 :root {
     /* Brand */
-    --brand-green: #33cc66;
-    --brand-navy: #0a2a43;
-    --brand-mint: #c8f7c5;
+    --brand-green: #2fbf71;
+    --brand-navy: #0f2238;
+    --brand-mint: #c9f2d6;
 
     /* Background */
-    --bg-light: #f8fff9;
-    --bg-mint: #e8ffef;
-    --bg-grey: #f2f4f7;
+    --bg-light: #f7fbf8;
+    --bg-mint: #ecf8f0;
+    --bg-grey: #eef2f5;
 
     /* Text */
-    --text-green: #33cc66;
-    --text-dark: #0a1f33;
-    --text-medium: #435a6b;
-    --text-light: #6f8a99;
+    --text-green: #2fbf71;
+    --text-dark: #0f2238;
+    --text-medium: #3e5366;
+    --text-light: #6b7c8a;
     --text-inverse: #ffffff;
 
     /* Buttons */
-    --btn-primary: #33cc66;
-    --btn-primary-hover: #28a95b;
-    --btn-secondary: #0a2a43;
-    --btn-secondary-hover: #082033;
+    --btn-primary: var(--brand-green);
+    --btn-primary-hover: #25a85f;
+    --btn-secondary: var(--brand-navy);
+    --btn-secondary-hover: #0c1b2d;
 
     /* Borders & Icons */
-    --border-light: #dce6e9;
-    --border-dark: #a3b8bf;
-    --icon-main: #33cc66;
-    --icon-sub: #0a2a43;
+    --border-light: #d9e4ea;
+    --border-dark: #a9bbc5;
+    --icon-main: var(--brand-green);
+    --icon-sub: var(--brand-navy);
 
     /* States */
-    --state-success: #33cc66;
-    --state-warning: #ffcc33;
-    --state-error: #ff4d4d;
-    --state-info: #3aa0ff;
+    --state-success: var(--brand-green);
+    --state-warning: #f0b429;
+    --state-error: #e65050;
+    --state-info: #2f8dde;
 
     /* Effects */
-    --shadow-soft: rgba(0, 0, 0, 0.08);
-    --shadow-strong: rgba(0, 0, 0, 0.15);
+    --shadow-soft: rgba(15, 34, 56, 0.08);
+    --shadow-strong: rgba(15, 34, 56, 0.16);
     --overlay: rgba(0, 0, 0, 0.45);
-    --bg-overlay-white: rgba(255, 255, 255, 0.85);
-}
-
-:root {
-    /* Brand */
-    --brand-green: #33cc66;
-    --brand-navy: #0a2a43;
-    --brand-mint: #c8f7c5;
-
-    /* Background */
-    --bg-light: #f8fff9;
-    --bg-mint: #e8ffef;
-    --bg-grey: #f2f4f7;
-
-    /* Text */
-    --text-dark: #0a1f33;
-    --text-medium: #435a6b;
-    --text-light: #6f8a99;
-    --text-inverse: #ffffff;
-
-    /* Buttons */
-    --btn-primary: #33cc66;
-    --btn-primary-hover: #28a95b;
-    --btn-secondary: #0a2a43;
-    --btn-secondary-hover: #082033;
-
-    /* Borders & Icons */
-    --border-light: #dce6e9;
-    --border-dark: #a3b8bf;
-    --icon-main: #33cc66;
-    --icon-sub: #0a2a43;
-
-    /* States */
-    --state-success: #33cc66;
-    --state-warning: #ffcc33;
-    --state-error: #ff4d4d;
-    --state-info: #3aa0ff;
-
-    /* Effects */
-    --shadow-soft: rgba(0, 0, 0, 0.08);
-    --shadow-strong: rgba(0, 0, 0, 0.15);
-    --overlay: rgba(0, 0, 0, 0.45);
-    --bg-overlay-white: rgba(255, 255, 255, 0.85);
+    --bg-overlay-white: rgba(255, 255, 255, 0.9);
 }
 
 

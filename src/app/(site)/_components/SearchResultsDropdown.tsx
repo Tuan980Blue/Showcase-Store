@@ -8,6 +8,7 @@ interface SearchResultsDropdownProps {
     results: ProductListItemDto[];
     loading: boolean;
     error: string | null;
+    query: string;
     onClose: () => void;
 }
 
@@ -19,8 +20,11 @@ const SearchResultsDropdown = ({
     results,
     loading,
     error,
+    query,
     onClose,
 }: SearchResultsDropdownProps) => {
+    const trimmedQuery = query.trim();
+
     if (loading) {
         return (
             <div
@@ -49,17 +53,14 @@ const SearchResultsDropdown = ({
         );
     }
 
-    if (results.length === 0) {
+    if (!loading && !error && trimmedQuery && results.length === 0) {
         return (
             <div
                 className="absolute top-full left-0 right-0 mt-1 bg-white border rounded-lg shadow-xl z-50"
                 style={{ borderColor: "var(--border-light)" }}
             >
-                <div className="px-2 py-4 text-center">
-                    <p
-                        className="text-sm"
-                        style={{ color: "var(--text-medium)" }}
-                    >
+                <div className="px-4 py-4">
+                    <p className="text-sm" style={{ color: "var(--text-medium)" }}>
                         Không tìm thấy sản phẩm phù hợp.
                     </p>
                 </div>
