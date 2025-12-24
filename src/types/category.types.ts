@@ -2,6 +2,7 @@
 
 export interface CreateCategoryDto {
   name: string;
+  imageUrl?: string | null;
   description?: string | null;
   seoTitle?: string | null;
   seoDescription?: string | null;
@@ -9,6 +10,7 @@ export interface CreateCategoryDto {
 
 export interface UpdateCategoryDto {
   name?: string | null;
+  imageUrl?: string | null;
   description?: string | null;
   seoTitle?: string | null;
   seoDescription?: string | null;
@@ -22,6 +24,7 @@ export interface CategoryResponseDto {
   id: number;
   name: string;
   slug: string;
+  imageUrl?: string | null;
   description?: string | null;
   seoTitle?: string | null;
   seoDescription?: string | null;
