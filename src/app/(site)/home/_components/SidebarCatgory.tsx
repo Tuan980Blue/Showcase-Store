@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from 'react';
+import Image from 'next/image';
 import type { CategoryResponseDto } from '@/types/category.types';
 import { HiChevronDown, HiSearch } from 'react-icons/hi';
 
@@ -112,7 +113,12 @@ const SidebarCatgory: React.FC<SidebarCategoryProps> = ({
                     selectedId === 'all' ? 'bg-[var(--bg-mint)] font-semibold' : ''
                   }`}
                 >
-                  <span className="text-[var(--text-dark)]">Tất cả sản phẩm</span>
+                  <div className="flex items-center gap-2">
+                    <div className="h-6 w-6 rounded-full border border-dashed border-[var(--border-light)] flex items-center justify-center text-[9px] text-[var(--text-light)] bg-[var(--bg-mint)]/60">
+                      All
+                    </div>
+                    <span className="text-[var(--text-dark)]">Tất cả sản phẩm</span>
+                  </div>
                 </button>
               </li>
               {filtered.map((category) => (
@@ -126,7 +132,24 @@ const SidebarCatgory: React.FC<SidebarCategoryProps> = ({
                         : ''
                     }`}
                   >
-                    <span className="text-[var(--text-dark)]">{category.name}</span>
+                    <div className="flex items-center gap-2">
+                      <div className="relative h-7 w-7 rounded-md overflow-hidden border border-[var(--border-light)] bg-[var(--bg-mint)]">
+                        {category.imageUrl ? (
+                          <Image
+                            src={category.imageUrl}
+                            alt={category.name}
+                            fill
+                            className="object-cover"
+                            sizes="28px"
+                          />
+                        ) : (
+                          <div className="flex h-full w-full items-center justify-center text-[10px] font-semibold text-[var(--brand-navy)]">
+                            {category.name.charAt(0).toUpperCase()}
+                          </div>
+                        )}
+                      </div>
+                      <span className="text-[var(--text-dark)]">{category.name}</span>
+                    </div>
                     {typeof category.productCount === 'number' && (
                       <span className="ml-1 text-[11px] text-[var(--text-light)]">
                         {category.productCount}

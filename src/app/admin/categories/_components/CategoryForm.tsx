@@ -18,6 +18,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
 }) => {
   const [formData, setFormData] = React.useState<CreateCategoryDto>({
     name: "",
+    imageUrl: "",
     description: "",
     seoTitle: "",
     seoDescription: "",
@@ -28,6 +29,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
     if (category) {
       setFormData({
         name: category.name || "",
+        imageUrl: category.imageUrl || "",
         description: category.description || "",
         seoTitle: category.seoTitle || "",
         seoDescription: category.seoDescription || "",
@@ -35,6 +37,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
     } else {
       setFormData({
         name: "",
+        imageUrl: "",
         description: "",
         seoTitle: "",
         seoDescription: "",
@@ -82,6 +85,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
       // Convert empty strings to null for optional fields
       const submitData: CreateCategoryDto | UpdateCategoryDto = {
         name: formData.name.trim(),
+        imageUrl: formData.imageUrl?.trim() || null,
         description: formData.description?.trim() || null,
         seoTitle: formData.seoTitle?.trim() || null,
         seoDescription: formData.seoDescription?.trim() || null,
@@ -95,6 +99,24 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-5">
+      <div>
+        <label
+          htmlFor="imageUrl"
+          className="block text-sm font-semibold text-gray-700 mb-2"
+        >
+          Image URL
+        </label>
+        <input
+          type="text"
+          id="imageUrl"
+          name="imageUrl"
+          value={formData.imageUrl || ""}
+          onChange={handleChange}
+          className="w-full rounded-lg border border-gray-300 px-4 py-2.5 bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          placeholder="Enter image URL for this category"
+        />
+      </div>
+
       <div>
         <label
           htmlFor="name"

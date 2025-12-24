@@ -90,12 +90,29 @@ const FeaturedCategoriesSection: React.FC<FeaturedCategoriesSectionProps> = ({
                                 {/* Background gradient effect */}
                                 <div className="absolute inset-0 bg-gradient-to-br from-[var(--brand-green)]/5 via-transparent to-[var(--brand-navy)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                                 
-                                {/* Category icon placeholder */}
-                                <div className="relative mb-4 aspect-square w-full rounded-xl bg-gradient-to-br from-[var(--bg-mint)] to-[var(--brand-green)]/20 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
-                                    <div className="text-3xl sm:text-4xl font-bold text-[var(--brand-green)] opacity-60">
-                                        {category.name.charAt(0).toUpperCase()}
-                                    </div>
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent rounded-xl" />
+                                {/* Category image / icon */}
+                                <div className="relative mb-4 aspect-square w-full rounded-xl overflow-hidden bg-gradient-to-br from-[var(--bg-mint)] to-[var(--brand-green)]/20 group-hover:scale-105 transition-transform duration-300">
+                                    {category.imageUrl ? (
+                                        <>
+                                            <Image
+                                                src={category.imageUrl}
+                                                alt={category.name}
+                                                fill
+                                                className="object-cover"
+                                                sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 16vw"
+                                            />
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+                                        </>
+                                    ) : (
+                                        <>
+                                            <div className="flex h-full w-full items-center justify-center">
+                                                <div className="text-3xl sm:text-4xl font-bold text-[var(--brand-green)] opacity-60">
+                                                    {category.name.charAt(0).toUpperCase()}
+                                                </div>
+                                            </div>
+                                            <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent rounded-xl" />
+                                        </>
+                                    )}
                                 </div>
 
                                 {/* Category info */}

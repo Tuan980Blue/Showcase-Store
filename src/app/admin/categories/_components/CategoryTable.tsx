@@ -69,6 +69,9 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
           <thead className="bg-gradient-to-r from-gray-50 to-gray-100">
             <tr>
               <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                Image
+              </th>
+              <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
                 ID
               </th>
               <th className="px-6 py-4 text-left text-xs font-semibold text-gray-700 uppercase tracking-wider">
@@ -97,6 +100,19 @@ const CategoryTable: React.FC<CategoryTableProps> = ({
                 key={category.id}
                 className="hover:bg-blue-50/50 transition-colors duration-150"
               >
+                <td className="px-6 py-4 whitespace-nowrap">
+                  {category.imageUrl ? (
+                    <img
+                      src={category.imageUrl}
+                      alt={category.name}
+                      className="h-10 w-10 rounded-md object-cover border border-gray-200"
+                    />
+                  ) : (
+                    <div className="h-10 w-10 rounded-md border border-dashed border-gray-300 flex items-center justify-center text-xs text-gray-400">
+                      N/A
+                    </div>
+                  )}
+                </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
                   #{category.id}
                 </td>
