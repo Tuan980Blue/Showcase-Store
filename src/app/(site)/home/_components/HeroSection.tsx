@@ -169,7 +169,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ products, loading }) => {
                         alt={featured[activeIndex].name}
                         fill
                         sizes="(min-width:768px) 180px, 140px"
-                        className="object-cover"
+                        className="object-contain p-1.5 sm:p-2"
                         priority={false}
                       />
                     ) : (

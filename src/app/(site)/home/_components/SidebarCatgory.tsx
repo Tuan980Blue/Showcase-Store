@@ -8,6 +8,7 @@ interface SidebarCategoryProps {
   categories: CategoryResponseDto[];
   loading: boolean;
   error: string | null;
+  selectedCategoryId?: string | 'all';
   onSelectCategory?: (categoryId: string | 'all') => void;
 }
 
@@ -15,11 +16,14 @@ const SidebarCatgory: React.FC<SidebarCategoryProps> = ({
   categories,
   loading,
   error,
+  selectedCategoryId,
   onSelectCategory,
 }) => {
   const [expanded, setExpanded] = useState(true);
   const [query, setQuery] = useState('');
-  const [selectedId, setSelectedId] = useState<string | 'all'>('all');
+  
+  // Sync with external selectedCategoryId prop
+  const selectedId = selectedCategoryId ?? 'all';
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -32,7 +36,6 @@ const SidebarCatgory: React.FC<SidebarCategoryProps> = ({
   }, [categories, query]);
 
   const handleSelect = (id: string | 'all') => {
-    setSelectedId(id);
     onSelectCategory?.(id);
   };
 

@@ -7,6 +7,11 @@ import ProductShowcaseSection from "@/app/(site)/home/_components/ProductShowcas
 import ValuePropsSection from "@/app/(site)/home/_components/ValuePropsSection";
 import BlogTeaserSection from "@/app/(site)/home/_components/BlogTeaserSection";
 import SidebarCatgory from "@/app/(site)/home/_components/SidebarCatgory";
+import FeaturedCategoriesSection from "@/app/(site)/home/_components/FeaturedCategoriesSection";
+import TrendingProductsSection from "@/app/(site)/home/_components/TrendingProductsSection";
+import SpecialOffersSection from "@/app/(site)/home/_components/SpecialOffersSection";
+import TestimonialsSection from "@/app/(site)/home/_components/TestimonialsSection";
+import NewsletterSection from "@/app/(site)/home/_components/NewsletterSection";
 
 const HomeContentPage: React.FC = () => {
     const [selectedCategoryId, setSelectedCategoryId] = React.useState<string | 'all'>('all');
@@ -34,13 +39,28 @@ const HomeContentPage: React.FC = () => {
             className="w-full bg-[var(--bg-light)] text-[var(--text-dark)]"
             style={{ backgroundColor: 'var(--bg-light)', color: 'var(--text-dark)' }}
         >
+            {/* Special Offers Banner */}
+            <SpecialOffersSection />
+
             {/* Hero / Top section */}
-            <div className={"container mx-auto"}>
+            <div className={"container mx-auto px-2 sm:px-4 lg:px-6 py-4 lg:py-6"}>
                 <HeroSection
                     products={products}
                     loading={productsLoading}
                 />
             </div>
+
+            {/* Featured Categories Section */}
+            <FeaturedCategoriesSection
+                categories={categories}
+                loading={categoriesLoading}
+            />
+
+            {/* Trending Products Section */}
+            <TrendingProductsSection
+                products={products}
+                loading={productsLoading}
+            />
 
             {/* Main content grid: sidebar + product showcase */}
             <div className="container mx-auto px-2 sm:px-4 lg:px-6 py-4 lg:py-8">
@@ -51,6 +71,7 @@ const HomeContentPage: React.FC = () => {
                             categories={categories}
                             loading={categoriesLoading}
                             error={categoriesError}
+                            selectedCategoryId={selectedCategoryId}
                             onSelectCategory={setSelectedCategoryId}
                         />
                     </aside>
@@ -69,15 +90,21 @@ const HomeContentPage: React.FC = () => {
                 </div>
             </div>
 
-            {/* Value propositions strip */}
-            <ValuePropsSection />
-
             {/* Blog / content teaser */}
             <BlogTeaserSection
                 posts={posts}
                 loading={postsLoading}
                 error={postsError}
             />
+
+            {/* Value propositions strip */}
+            <ValuePropsSection />
+
+            {/* Testimonials Section */}
+            <TestimonialsSection />
+
+            {/* Newsletter Signup Section */}
+            <NewsletterSection />
         </div>
     );
 };
