@@ -155,45 +155,92 @@ const Navbar = () => {
             >
                 <div className="container mx-auto px-4 py-4">
                     <div className="flex flex-col lg:flex-row items-center gap-4 lg:gap-6">
-                        {/* Left - Logo */}
-                        <div className="flex items-center gap-4 flex-shrink-0">
-                            <div
-                                className="flex items-center justify-center rounded-xl"
-                            >
-                                <Image
-                                    src="/logo1.png"
-                                    alt="Điện tử Tuấn Anh Logo"
-                                    width={82}
-                                    height={82}
-                                    className="object-contain"
-                                    priority
-                                />
-                            </div>
-                            <div className="flex flex-col">
-                                <Link
-                                    href="/"
-                                    className="text-sm sm:text-lg font-bold leading-tight transition-all duration-200 hover:text-opacity-70"
-                                    style={{
-                                        color: "var(--brand-navy)",
-                                        textTransform: "uppercase",
-                                        letterSpacing: "0.02em",
-                                    }}
+                        {/* Top Row - Logo + Action Icons (Mobile) / Logo Only (Desktop) */}
+                        <div className="flex items-center justify-between w-full lg:w-auto lg:justify-start gap-2 lg:gap-4 flex-shrink-0">
+                            {/* Left - Logo */}
+                            <div className="flex items-center gap-2 sm:gap-4 flex-shrink-0">
+                                <div
+                                    className="flex items-center justify-center rounded-xl"
                                 >
-                                    Điện Tử Tuấn Anh
-                                </Link>
+                                    <Image
+                                        src="/logo1.png"
+                                        alt="Điện tử Tuấn Anh Logo"
+                                        width={82}
+                                        height={82}
+                                        className="object-contain w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-[82px] lg:h-[82px]"
+                                        priority
+                                    />
+                                </div>
+                                <div className="flex flex-col">
+                                    <Link
+                                        href="/"
+                                        className="text-sm sm:text-lg font-bold leading-tight transition-all duration-200 hover:text-opacity-70"
+                                        style={{
+                                            color: "var(--brand-navy)",
+                                            textTransform: "uppercase",
+                                            letterSpacing: "0.02em",
+                                        }}
+                                    >
+                                        Điện Tử Tuấn Anh
+                                    </Link>
 
-                                <p
-                                    className="text-[11px] md:text-xs font-semibold mt-1 uppercase tracking-wide"
-                                    style={{ color: "var(--brand-green)" }}
-                                >
-                                    www.dientutuananh.com
-                                </p>
-                                <p
-                                    className="text-xs md:text-sm mt-1 font-medium"
-                                    style={{ color: "var(--text-medium)" }}
-                                >
-                                    Chuyên điện tử &amp; gia dụng, giá tốt mỗi ngày
-                                </p>
+                                    <p
+                                        className="text-[11px] md:text-xs font-semibold mt-1 uppercase tracking-wide"
+                                        style={{ color: "var(--brand-green)" }}
+                                    >
+                                        www.dientutuananh.com
+                                    </p>
+                                    <p
+                                        className="text-xs md:text-sm mt-1 font-medium"
+                                        style={{ color: "var(--text-medium)" }}
+                                    >
+                                        Chuyên điện tử &amp; gia dụng, giá tốt mỗi ngày
+                                    </p>
+                                </div>
+                            </div>
+
+                            {/* Action Icons - Mobile (top with logo) */}
+                            <div className="flex items-center gap-1 lg:hidden">
+                                {[
+                                    {
+                                        id: "tiktok",
+                                        href: "https://vt.tiktok.com/ZSHTcp7yt31UR-XNxQ0/",
+                                        label: "Tiktok Shop",
+                                        icon: "/tiktok.png",
+                                    },
+                                    {
+                                        id: "shopee",
+                                        href: "https://vn.shp.ee/E74Wp9t",
+                                        label: "Shopee",
+                                        icon: "/shopee.png",
+                                    },
+                                    {
+                                        id: "zalo",
+                                        href: "https://zalo.me/0941210212",
+                                        label: "Zalo",
+                                        icon: "/zalo.png",
+                                    },
+                                ].map((item) => (
+                                    <Link
+                                        key={item.id}
+                                        href={item.href}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="group flex items-center justify-center rounded-md border px-1 py-0.5 bg-white/90 hover:bg-white shadow-xs hover:shadow-sm transition-all"
+                                        style={{ borderColor: "var(--border-light)", color: "var(--text-medium)" }}
+                                        title={item.label}
+                                    >
+                                        <span className="flex h-4 w-4 items-center justify-center flex-shrink-0">
+                                            <Image
+                                                src={item.icon}
+                                                alt={item.label}
+                                                width={12}
+                                                height={12}
+                                                className="object-contain w-3 h-3"
+                                            />
+                                        </span>
+                                    </Link>
+                                ))}
                             </div>
                         </div>
 
@@ -202,8 +249,8 @@ const Navbar = () => {
                             <SearchBar />
                         </div>
 
-                        {/* Right - Action Icons */}
-                        <div className="flex items-center gap-2 lg:gap-4">
+                        {/* Right - Action Icons - Desktop */}
+                        <div className="hidden lg:flex items-center gap-2">
                             {[
                                 {
                                     id: "tiktok",
@@ -229,25 +276,21 @@ const Navbar = () => {
                                     href={item.href}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="group flex items-center gap-2 rounded-full border px-3 py-1.5 bg-white/90 hover:bg-white shadow-sm hover:shadow-md transition-all"
+                                    className="group flex items-center gap-1 rounded-lg border px-2 py-1 bg-white/90 hover:bg-white shadow-xs hover:shadow-sm transition-all"
                                     style={{ borderColor: "var(--border-light)", color: "var(--text-medium)" }}
+                                    title={item.label}
                                 >
-                                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 group-hover:bg-slate-200">
+                                    <span className="flex h-6 w-6 items-center justify-center flex-shrink-0">
                                         <Image
                                             src={item.icon}
                                             alt={item.label}
-                                            width={18}
-                                            height={18}
-                                            className="object-contain"
+                                            width={20}
+                                            height={20}
+                                            className="object-contain w-5 h-5"
                                         />
                                     </span>
-                                    <span className="flex flex-col leading-tight">
-                                        <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
-                                            Mua ngay
-                                        </span>
-                                        <span className="text-xs font-semibold">
-                                            {item.label}
-                                        </span>
+                                    <span className="text-[10px] font-medium leading-tight whitespace-nowrap">
+                                        {item.label}
                                     </span>
                                 </Link>
                             ))}
@@ -287,7 +330,7 @@ const Navbar = () => {
                                                 style={{ color: "var(--icon-main)" }}
                                             />
                                         )}
-                                        <span className="text-[5px] sm:text-[10px] lg:text-[12px] xl:text-base">{item.label}</span>
+                                        <span className="text-[6px] sm:text-[10px] lg:text-[14px] xl:text-base">{item.label}</span>
                                         {item.hasDropdown && (
                                             <HiChevronDown className="w-3 h-3 lg:w-5 lg:h-5 flex-shrink-0" />
                                         )}

@@ -102,7 +102,7 @@ const ProductShowcaseSection: React.FC<ProductShowcaseSectionProps> = ({
   return (
     <div className="space-y-4 sm:space-y-5">
       {/* Header */}
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex gap-3 flex-row justify-between">
         <div>
           <h2 className="text-base sm:text-lg font-semibold uppercase tracking-wide text-[var(--brand-navy)]">
             Sản phẩm dành cho bạn

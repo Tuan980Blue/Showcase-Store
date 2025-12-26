@@ -35,7 +35,7 @@ const FeaturedCategoriesSection: React.FC<FeaturedCategoriesSectionProps> = ({
                         <div className="h-6 w-48 bg-[var(--bg-grey)] rounded animate-pulse mb-2" />
                         <div className="h-4 w-64 bg-[var(--bg-grey)] rounded animate-pulse" />
                     </div>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                    <div className="grid grid-cols-3 lg:grid-cols-6 gap-4">
                         {Array.from({ length: 6 }).map((_, i) => (
                             <div
                                 key={i}
@@ -77,7 +77,7 @@ const FeaturedCategoriesSection: React.FC<FeaturedCategoriesSectionProps> = ({
                     </Link>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6">
+                <div className="grid grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-6">
                     {featuredCategories.map((category) => {
                         const href = category.slug ? `/categories/${category.slug}` : `/products?category=${category.id}`;
                         
