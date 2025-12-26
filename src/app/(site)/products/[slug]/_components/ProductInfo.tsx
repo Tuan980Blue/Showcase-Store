@@ -105,9 +105,9 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
           </a>
         )}
         
-        {product.tikTokLink && (
+        {product.tiktokLink && (
           <a
-            href={product.tikTokLink}
+            href={product.tiktokLink}
             target="_blank"
             rel="noreferrer"
             className="flex w-full items-center justify-center gap-2 rounded-lg border-2 px-4 py-2.5 text-sm font-semibold shadow-sm transition-all duration-200 hover:shadow-md sm:gap-3 sm:px-6 sm:py-3 sm:text-base"
@@ -139,7 +139,7 @@ const ProductInfo: React.FC<ProductInfoProps> = ({ product }) => {
           </a>
         )}
 
-        {!product.shopeeLink && !product.tikTokLink && (
+        {!product.shopeeLink && !product.tiktokLink && (
           <div className="rounded-lg border p-4 text-center" style={{ borderColor: 'var(--border-light)', backgroundColor: 'var(--bg-light)' }}>
             <p className="text-xs sm:text-sm" style={{ color: 'var(--text-medium)' }}>
               Liên hệ với chúng tôi để đặt hàng
