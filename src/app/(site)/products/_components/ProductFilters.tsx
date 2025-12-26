@@ -66,24 +66,41 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
 
   return (
     <div 
-      className="rounded-xl border bg-white shadow-sm"
-      style={{ borderColor: 'var(--border-light)' }}
+      className="sticky top-0 z-40 mb-6 rounded-xl border bg-white shadow-lg transition-all duration-300 lg:relative lg:top-auto lg:z-auto lg:shadow-sm"
+      style={{ 
+        borderColor: 'var(--border-light)',
+        backgroundColor: 'white',
+      }}
     >
       {/* Header */}
       <div 
-        className="flex items-center justify-between p-4 sm:p-5"
+        className="flex items-center justify-between p-4 sm:p-5 lg:p-6"
         style={{
           borderBottom: hasActiveFilters ? '1px solid var(--border-light)' : 'none',
         }}
       >
-        <div className="flex items-center gap-2">
-          <HiFilter className="h-5 w-5 text-[var(--brand-green)]" />
+        <div className="flex items-center gap-3">
+          <div 
+            className="flex h-10 w-10 items-center justify-center rounded-lg sm:h-12 sm:w-12"
+            style={{ backgroundColor: 'var(--bg-mint)' }}
+          >
+            <HiFilter className="h-5 w-5 sm:h-6 sm:w-6" style={{ color: 'var(--brand-green)' }} />
+          </div>
           <div>
-            <h3 className="text-sm font-semibold text-[var(--text-dark)] sm:text-base">
+            <h3 
+              className="text-sm font-bold sm:text-base lg:text-lg"
+              style={{ color: 'var(--text-dark)' }}
+            >
               Bộ lọc tìm kiếm
             </h3>
-            <p className="mt-0.5 text-xs text-[var(--text-light)]">
-              {resultCount} sản phẩm {hasActiveFilters && 'phù hợp với bộ lọc'}
+            <p 
+              className="mt-0.5 text-xs sm:text-sm"
+              style={{ color: 'var(--text-light)' }}
+            >
+              <span className="font-semibold" style={{ color: 'var(--brand-green)' }}>
+                {resultCount}
+              </span>
+              {' '}sản phẩm {hasActiveFilters && 'phù hợp'}
             </p>
           </div>
         </div>
@@ -91,31 +108,48 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
           {hasActiveFilters && (
             <button
               onClick={onClearFilters}
-              className="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors duration-200"
+              className="inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold transition-all duration-200 sm:px-4 sm:text-sm"
               style={{
                 color: 'var(--brand-green)',
                 backgroundColor: 'var(--bg-mint)',
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = 'var(--brand-mint)';
+                e.currentTarget.style.transform = 'translateY(-1px)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = 'var(--bg-mint)';
+                e.currentTarget.style.transform = 'translateY(0)';
               }}
             >
-              <HiX className="h-3 w-3" />
+              <HiX className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
               <span className="hidden sm:inline">Xóa bộ lọc</span>
+              <span className="sm:hidden">Xóa</span>
             </button>
           )}
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="rounded-lg p-1.5 transition-colors duration-200 hover:bg-[var(--bg-grey)]"
+            className="rounded-lg p-2 transition-all duration-200"
+            style={{ 
+              backgroundColor: isExpanded ? 'var(--bg-grey)' : 'transparent',
+            }}
+            onMouseEnter={(e) => {
+              if (!isExpanded) {
+                e.currentTarget.style.backgroundColor = 'var(--bg-grey)';
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (!isExpanded) {
+                e.currentTarget.style.backgroundColor = 'transparent';
+              }
+            }}
             aria-label={isExpanded ? 'Thu gọn' : 'Mở rộng'}
           >
             <HiChevronDown
-              className={`h-5 w-5 text-[var(--text-medium)] transition-transform duration-200 ${
+              className={`h-5 w-5 transition-transform duration-300 ${
                 isExpanded ? 'rotate-180' : ''
               }`}
+              style={{ color: 'var(--text-medium)' }}
             />
           </button>
         </div>
@@ -123,31 +157,54 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
 
       {/* Filter Inputs */}
       {isExpanded && (
-        <div className="p-4 sm:p-5">
+        <div className="p-4 sm:p-5 lg:p-6">
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {/* Search Input */}
             <div className="sm:col-span-2 lg:col-span-1">
-              <label className="mb-2 block text-xs font-medium text-[var(--text-medium)]">
+              <label 
+                className="mb-2 block text-xs font-semibold sm:text-sm"
+                style={{ color: 'var(--text-medium)' }}
+              >
                 Tìm kiếm sản phẩm
               </label>
               <div className="relative">
-                <HiSearch className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--text-light)]" />
+                <HiSearch 
+                  className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 sm:h-5 sm:w-5" 
+                  style={{ color: 'var(--text-light)' }}
+                />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => handleSearchChange(e.target.value)}
                   placeholder="Nhập tên sản phẩm..."
-                  className="w-full rounded-lg border pl-10 pr-10 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand-green)] transition-all duration-200"
+                  className="w-full rounded-lg border pl-10 pr-10 py-2.5 text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 sm:py-3 sm:text-base"
                   style={{
                     borderColor: 'var(--border-light)',
                     backgroundColor: 'var(--bg-light)',
                     color: 'var(--text-dark)',
                   }}
+                  onFocus={(e) => {
+                    e.currentTarget.style.borderColor = 'var(--brand-green)';
+                    e.currentTarget.style.boxShadow = '0 0 0 3px rgba(47, 191, 113, 0.1)';
+                  }}
+                  onBlur={(e) => {
+                    e.currentTarget.style.borderColor = 'var(--border-light)';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
                 />
                 {searchQuery && (
                   <button
                     onClick={() => handleSearchChange('')}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 text-[var(--text-light)] transition-colors duration-200 hover:bg-[var(--bg-grey)] hover:text-[var(--text-dark)]"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1 transition-all duration-200 hover:scale-110"
+                    style={{ color: 'var(--text-light)' }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = 'var(--text-dark)';
+                      e.currentTarget.style.backgroundColor = 'var(--bg-grey)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = 'var(--text-light)';
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                    }}
                     aria-label="Xóa tìm kiếm"
                   >
                     <HiX className="h-4 w-4" />
@@ -158,11 +215,14 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
 
             {/* Category Filter */}
             <div>
-              <label className="mb-2 block text-xs font-medium text-[var(--text-medium)]">
+              <label 
+                className="mb-2 block text-xs font-semibold sm:text-sm"
+                style={{ color: 'var(--text-medium)' }}
+              >
                 Danh mục
               </label>
               <select
-                className="w-full rounded-lg border px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand-green)] transition-all duration-200"
+                className="w-full rounded-lg border px-3 py-2.5 text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 sm:py-3 sm:text-base"
                 style={{
                   borderColor: 'var(--border-light)',
                   backgroundColor: 'var(--bg-light)',
@@ -170,6 +230,14 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
                 }}
                 value={categoryId}
                 onChange={(e) => handleCategoryChange(e.target.value)}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--brand-green)';
+                  e.currentTarget.style.boxShadow = '0 0 0 3px rgba(47, 191, 113, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border-light)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
               >
                 <option value="all">Tất cả danh mục</option>
                 {categories.map((category) => (
@@ -182,11 +250,14 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
 
             {/* Price Range Filter */}
             <div>
-              <label className="mb-2 block text-xs font-medium text-[var(--text-medium)]">
+              <label 
+                className="mb-2 block text-xs font-semibold sm:text-sm"
+                style={{ color: 'var(--text-medium)' }}
+              >
                 Khoảng giá
               </label>
               <select
-                className="w-full rounded-lg border px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand-green)] transition-all duration-200"
+                className="w-full rounded-lg border px-3 py-2.5 text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 sm:py-3 sm:text-base"
                 style={{
                   borderColor: 'var(--border-light)',
                   backgroundColor: 'var(--bg-light)',
@@ -194,6 +265,14 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
                 }}
                 value={priceRange}
                 onChange={(e) => handlePriceRangeChange(e.target.value as PriceRange)}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--brand-green)';
+                  e.currentTarget.style.boxShadow = '0 0 0 3px rgba(47, 191, 113, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border-light)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
               >
                 <option value="all">Tất cả mức giá</option>
                 <option value="under-100k">Dưới 100.000₫</option>
@@ -206,11 +285,14 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
 
             {/* Sort Options */}
             <div>
-              <label className="mb-2 block text-xs font-medium text-[var(--text-medium)]">
+              <label 
+                className="mb-2 block text-xs font-semibold sm:text-sm"
+                style={{ color: 'var(--text-medium)' }}
+              >
                 Sắp xếp theo
               </label>
               <select
-                className="w-full rounded-lg border px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--brand-green)] transition-all duration-200"
+                className="w-full rounded-lg border px-3 py-2.5 text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-1 sm:py-3 sm:text-base"
                 style={{
                   borderColor: 'var(--border-light)',
                   backgroundColor: 'var(--bg-light)',
@@ -218,6 +300,14 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
                 }}
                 value={sortBy}
                 onChange={(e) => handleSortChange(e.target.value as SortOption)}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--brand-green)';
+                  e.currentTarget.style.boxShadow = '0 0 0 3px rgba(47, 191, 113, 0.1)';
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = 'var(--border-light)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
               >
                 <option value="default">Mặc định</option>
                 <option value="price-asc">Giá: Thấp → Cao</option>
@@ -231,49 +321,78 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
           {/* Active Filters Display */}
           {hasActiveFilters && (
             <div 
-              className="mt-4 flex flex-wrap items-center gap-2 pt-4 border-t"
+              className="mt-4 flex flex-wrap items-center gap-2 pt-4 border-t sm:mt-6 sm:gap-3"
               style={{ borderColor: 'var(--border-light)' }}
             >
-              <span className="text-xs font-medium text-[var(--text-medium)]">Đang lọc:</span>
+              <span 
+                className="text-xs font-semibold sm:text-sm"
+                style={{ color: 'var(--text-medium)' }}
+              >
+                Đang lọc:
+              </span>
               {searchQuery && (
                 <span 
-                  className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium"
+                  className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-all duration-200 sm:px-4 sm:py-2 sm:text-sm"
                   style={{
                     backgroundColor: 'var(--bg-mint)',
                     color: 'var(--brand-navy)',
                   }}
                 >
-                  "{searchQuery}"
+                  <span className="max-w-[120px] truncate sm:max-w-none">"{searchQuery}"</span>
                   <button
                     onClick={() => removeFilter('searchQuery', '')}
-                    className="rounded-full p-0.5 transition-colors duration-200 hover:bg-[var(--brand-green)] hover:text-white"
+                    className="flex-shrink-0 rounded-full p-0.5 transition-all duration-200 hover:scale-110"
+                    style={{
+                      color: 'var(--text-medium)',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'var(--brand-green)';
+                      e.currentTarget.style.color = 'white';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = 'var(--text-medium)';
+                    }}
                     aria-label="Xóa tìm kiếm"
                   >
-                    <HiX className="h-3 w-3" />
+                    <HiX className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                   </button>
                 </span>
               )}
               {categoryId !== 'all' && (
                 <span 
-                  className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium"
+                  className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-all duration-200 sm:px-4 sm:py-2 sm:text-sm"
                   style={{
                     backgroundColor: 'var(--bg-mint)',
                     color: 'var(--brand-navy)',
                   }}
                 >
-                  {categories.find((c) => c.id.toString() === categoryId)?.name || 'Danh mục'}
+                  <span className="max-w-[120px] truncate sm:max-w-none">
+                    {categories.find((c) => c.id.toString() === categoryId)?.name || 'Danh mục'}
+                  </span>
                   <button
                     onClick={() => removeFilter('categoryId', 'all')}
-                    className="rounded-full p-0.5 transition-colors duration-200 hover:bg-[var(--brand-green)] hover:text-white"
+                    className="flex-shrink-0 rounded-full p-0.5 transition-all duration-200 hover:scale-110"
+                    style={{
+                      color: 'var(--text-medium)',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'var(--brand-green)';
+                      e.currentTarget.style.color = 'white';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = 'var(--text-medium)';
+                    }}
                     aria-label="Xóa danh mục"
                   >
-                    <HiX className="h-3 w-3" />
+                    <HiX className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                   </button>
                 </span>
               )}
               {priceRange !== 'all' && (
                 <span 
-                  className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium"
+                  className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-all duration-200 sm:px-4 sm:py-2 sm:text-sm"
                   style={{
                     backgroundColor: 'var(--bg-mint)',
                     color: 'var(--brand-navy)',
@@ -282,16 +401,27 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
                   {getPriceRangeLabel(priceRange)}
                   <button
                     onClick={() => removeFilter('priceRange', 'all')}
-                    className="rounded-full p-0.5 transition-colors duration-200 hover:bg-[var(--brand-green)] hover:text-white"
+                    className="flex-shrink-0 rounded-full p-0.5 transition-all duration-200 hover:scale-110"
+                    style={{
+                      color: 'var(--text-medium)',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'var(--brand-green)';
+                      e.currentTarget.style.color = 'white';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = 'var(--text-medium)';
+                    }}
                     aria-label="Xóa khoảng giá"
                   >
-                    <HiX className="h-3 w-3" />
+                    <HiX className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                   </button>
                 </span>
               )}
               {sortBy !== 'default' && (
                 <span 
-                  className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-medium"
+                  className="inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition-all duration-200 sm:px-4 sm:py-2 sm:text-sm"
                   style={{
                     backgroundColor: 'var(--bg-mint)',
                     color: 'var(--brand-navy)',
@@ -300,10 +430,21 @@ const ProductFilters: React.FC<ProductFiltersProps> = ({
                   {getSortLabel(sortBy)}
                   <button
                     onClick={() => removeFilter('sortBy', 'default')}
-                    className="rounded-full p-0.5 transition-colors duration-200 hover:bg-[var(--brand-green)] hover:text-white"
+                    className="flex-shrink-0 rounded-full p-0.5 transition-all duration-200 hover:scale-110"
+                    style={{
+                      color: 'var(--text-medium)',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'var(--brand-green)';
+                      e.currentTarget.style.color = 'white';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = 'var(--text-medium)';
+                    }}
                     aria-label="Xóa sắp xếp"
                   >
-                    <HiX className="h-3 w-3" />
+                    <HiX className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                   </button>
                 </span>
               )}

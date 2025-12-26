@@ -69,7 +69,7 @@ const ProductsPage: React.FC = () => {
       }}
     >
       {/* Main Container */}
-      <div className="container mx-auto px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+      <div className="container mx-auto px-4 py-4 sm:px-6 sm:py-6 lg:px-8 lg:py-8">
         {/* Page Header */}
         <ProductPageHeader
           title="Tất cả sản phẩm"
@@ -78,7 +78,7 @@ const ProductsPage: React.FC = () => {
         />
 
         {/* Filters Section */}
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <ProductFilters
             categories={categories}
             filterState={filterState}
@@ -89,9 +89,9 @@ const ProductsPage: React.FC = () => {
         </div>
 
         {/* Main Content Grid */}
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-12 lg:gap-6">
           {/* Sidebar - Categories */}
-          <aside className="lg:sticky lg:top-20 lg:col-span-3 lg:self-start">
+          <aside className="lg:col-span-3">
             <CategorySidebar
               categories={categories}
               loading={categoriesLoading}
@@ -104,13 +104,13 @@ const ProductsPage: React.FC = () => {
           <main className="lg:col-span-9">
             {hasError ? (
               <div 
-                className="rounded-xl border p-8 text-center"
+                className="rounded-xl border p-8 text-center sm:p-12"
                 style={{ 
                   borderColor: 'var(--state-error)',
                   backgroundColor: 'rgba(230, 80, 80, 0.05)',
                 }}
               >
-                <p className="text-base font-medium text-[var(--state-error)] sm:text-lg">
+                <p className="text-base font-semibold text-[var(--state-error)] sm:text-lg">
                   {productsError || categoriesError || 'Đã xảy ra lỗi'}
                 </p>
                 <p className="mt-2 text-sm text-[var(--text-light)]">

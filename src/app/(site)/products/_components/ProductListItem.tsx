@@ -6,15 +6,14 @@ import Link from 'next/link';
 import { HiShoppingBag, HiExternalLink } from 'react-icons/hi';
 import type { ProductListItemDto } from '@/types/product.types';
 
-interface ProductCardProps {
+interface ProductListItemProps {
   product: ProductListItemDto;
-  priority?: boolean;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, priority = false }) => {
+const ProductListItem: React.FC<ProductListItemProps> = ({ product }) => {
   return (
     <article
-      className="group relative flex flex-col overflow-hidden rounded-xl border bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl"
+      className="group flex flex-col overflow-hidden rounded-xl border bg-white shadow-sm transition-all duration-300 hover:shadow-lg sm:flex-row"
       style={{ 
         borderColor: 'var(--border-light)',
       }}
@@ -22,73 +21,53 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, priority = false }) 
       {/* Image Container */}
       <Link 
         href={`/products/${product.slug}`}
-        className="relative block aspect-square w-full overflow-hidden bg-[var(--bg-mint)]"
+        className="relative block aspect-square w-full overflow-hidden bg-[var(--bg-mint)] sm:w-48 sm:flex-shrink-0 lg:w-56"
       >
         {product.imageUrl ? (
           <Image
             src={product.imageUrl}
             alt={product.name}
             fill
-            sizes="(min-width: 1024px) 20vw, (min-width: 768px) 25vw, (min-width: 640px) 33vw, 50vw"
-            className="object-cover transition-transform duration-500 group-hover:scale-110"
-            priority={priority}
+            sizes="(min-width: 1024px) 224px, (min-width: 640px) 192px, 100vw"
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
           />
         ) : (
           <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
-            <HiShoppingBag className="h-12 w-12 mb-2" style={{ color: 'var(--text-light)' }} />
-            <span className="text-xs" style={{ color: 'var(--text-light)' }}>Chưa có hình ảnh</span>
+            <HiShoppingBag className="h-12 w-12 text-[var(--text-light)] mb-2" />
+            <span className="text-xs text-[var(--text-light)]">Chưa có hình ảnh</span>
           </div>
         )}
         
         {/* Category Badge */}
-        <div className="absolute top-2 left-2 sm:top-3 sm:left-3">
+        <div className="absolute top-3 left-3">
           <span 
-            className="inline-flex items-center rounded-full px-2.5 py-1 text-[10px] font-semibold backdrop-blur-md shadow-sm sm:text-xs"
+            className="inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium backdrop-blur-sm"
             style={{
-              backgroundColor: 'rgba(47, 191, 113, 0.95)',
+              backgroundColor: 'rgba(47, 191, 113, 0.9)',
               color: 'var(--text-inverse)',
             }}
           >
             {product.categoryName}
           </span>
         </div>
-
-        {/* Hover Overlay with Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-black/10 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
-        
-        {/* Quick View Badge */}
-        <div className="absolute bottom-3 right-3 opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-y-0 translate-y-2">
-          <div 
-            className="rounded-full px-3 py-1.5 text-xs font-semibold backdrop-blur-md shadow-lg"
-            style={{
-              backgroundColor: 'rgba(255, 255, 255, 0.95)',
-              color: 'var(--brand-green)',
-            }}
-          >
-            Xem nhanh
-          </div>
-        </div>
       </Link>
 
       {/* Content */}
-      <div className="flex flex-1 flex-col p-3 sm:p-4 lg:p-5">
+      <div className="flex flex-1 flex-col p-4 sm:p-6 lg:p-8">
         {/* Product Name */}
         <Link href={`/products/${product.slug}`}>
           <h3 
-            className="line-clamp-2 text-sm font-bold leading-tight transition-colors duration-200 group-hover:text-[var(--brand-green)] sm:text-base lg:text-lg"
-            style={{ 
-              color: 'var(--text-dark)',
-              minHeight: '2.5rem',
-            }}
+            className="text-lg font-bold leading-tight transition-colors duration-200 group-hover:text-[var(--brand-green)] sm:text-xl lg:text-2xl"
+            style={{ color: 'var(--text-dark)' }}
           >
             {product.name}
           </h3>
         </Link>
 
         {/* Price */}
-        <div className="mt-2 sm:mt-3 flex items-baseline gap-2">
+        <div className="mt-3 flex items-baseline gap-2">
           <p 
-            className="text-lg font-bold sm:text-xl lg:text-2xl"
+            className="text-2xl font-bold sm:text-3xl lg:text-4xl"
             style={{ color: 'var(--brand-green)' }}
           >
             {product.price?.toLocaleString('vi-VN')}₫
@@ -96,13 +75,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, priority = false }) 
         </div>
 
         {/* Action Buttons */}
-        <div className="mt-3 sm:mt-4 flex flex-col gap-2 sm:flex-row sm:items-center">
+        <div className="mt-6 flex flex-wrap items-center gap-2 sm:mt-auto">
           {product.shopeeLink && (
             <a
               href={product.shopeeLink}
               target="_blank"
               rel="noreferrer"
-              className="flex flex-1 items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:shadow-md sm:text-sm"
+              className="inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:shadow-md sm:px-6 sm:text-base"
               style={{
                 backgroundColor: '#ee4d2d',
               }}
@@ -118,13 +97,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, priority = false }) 
               <Image
                 src="/shopee.png"
                 alt="Shopee"
-                width={16}
-                height={16}
-                className="h-4 w-4"
+                width={20}
+                height={20}
+                className="h-5 w-5"
               />
-              <span className="hidden sm:inline">Mua trên Shopee</span>
-              <span className="sm:hidden">Shopee</span>
-              <HiExternalLink className="h-3 w-3" />
+              <span>Mua trên Shopee</span>
+              <HiExternalLink className="h-4 w-4" />
             </a>
           )}
           {product.tikTokLink && (
@@ -132,7 +110,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, priority = false }) 
               href={product.tikTokLink}
               target="_blank"
               rel="noreferrer"
-              className="flex flex-1 items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:shadow-md sm:text-sm"
+              className="inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:shadow-md sm:px-6 sm:text-base"
               style={{
                 backgroundColor: '#000000',
               }}
@@ -148,19 +126,18 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, priority = false }) 
               <Image
                 src="/tiktok.png"
                 alt="TikTok"
-                width={16}
-                height={16}
-                className="h-4 w-4"
+                width={20}
+                height={20}
+                className="h-5 w-5"
               />
-              <span className="hidden sm:inline">Xem trên TikTok</span>
-              <span className="sm:hidden">TikTok</span>
-              <HiExternalLink className="h-3 w-3" />
+              <span>Xem trên TikTok</span>
+              <HiExternalLink className="h-4 w-4" />
             </a>
           )}
           {!product.shopeeLink && !product.tikTokLink && (
             <Link
               href={`/products/${product.slug}`}
-              className="flex w-full items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-xs font-semibold text-white shadow-sm transition-all duration-200 hover:shadow-md sm:text-sm"
+              className="inline-flex items-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:shadow-md sm:px-6 sm:text-base"
               style={{
                 backgroundColor: 'var(--btn-primary)',
               }}
@@ -173,7 +150,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, priority = false }) 
                 e.currentTarget.style.transform = 'translateY(0)';
               }}
             >
-              <HiShoppingBag className="h-4 w-4" />
+              <HiShoppingBag className="h-5 w-5" />
               <span>Xem chi tiết</span>
             </Link>
           )}
@@ -183,5 +160,5 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, priority = false }) 
   );
 };
 
-export default ProductCard;
+export default ProductListItem;
 
