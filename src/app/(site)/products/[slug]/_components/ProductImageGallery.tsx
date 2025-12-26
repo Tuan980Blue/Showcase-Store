@@ -115,7 +115,6 @@ const ProductImageGallery: React.FC<ProductImageGalleryProps> = ({ product }) =>
               }`}
               style={{
                 borderColor: selectedImage === index ? 'var(--brand-green)' : 'var(--border-light)',
-                ringColor: 'var(--brand-green)',
               }}
               onMouseEnter={(e) => {
                 if (selectedImage !== index) {
