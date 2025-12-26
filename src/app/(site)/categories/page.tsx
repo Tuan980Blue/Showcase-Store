@@ -45,7 +45,7 @@ const CategoriesPage: React.FC = () => {
       }}
     >
       {/* Main Container */}
-      <div className="container mx-auto px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+      <div className="container mx-auto px-4 py-3 sm:px-6 sm:py-4 lg:px-8 lg:py-6">
         {/* Page Header */}
         <CategoryPageHeader
           title="Tất cả danh mục"
@@ -54,7 +54,7 @@ const CategoriesPage: React.FC = () => {
         />
 
         {/* Search and Sort Section */}
-        <div className="mb-6">
+        <div className="mb-4 sm:mb-6">
           <CategorySearch
             categories={categories}
             searchQuery={searchQuery}
@@ -67,28 +67,11 @@ const CategoriesPage: React.FC = () => {
 
         {/* Categories Grid */}
         <main>
-          {categoriesError ? (
-            <div 
-              className="rounded-xl border p-8 text-center"
-              style={{ 
-                borderColor: 'var(--state-error)',
-                backgroundColor: 'rgba(230, 80, 80, 0.05)',
-              }}
-            >
-              <p className="text-base font-medium text-[var(--state-error)] sm:text-lg">
-                {categoriesError || 'Đã xảy ra lỗi'}
-              </p>
-              <p className="mt-2 text-sm text-[var(--text-light)]">
-                Vui lòng thử lại sau
-              </p>
-            </div>
-          ) : (
-            <CategoryGrid
-              categories={filteredCategories}
-              loading={categoriesLoading}
-              error={categoriesError}
-            />
-          )}
+          <CategoryGrid
+            categories={filteredCategories}
+            loading={categoriesLoading}
+            error={categoriesError}
+          />
         </main>
       </div>
     </div>
