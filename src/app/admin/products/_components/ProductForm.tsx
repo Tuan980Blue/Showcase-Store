@@ -30,7 +30,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
     price: 0,
     imageUrl: null,
     shopeeLink: null,
-    tiktokLink: null,
+    tikTokLink: null,
     categoryId: 0,
     metaTitle: null,
     metaDescription: null,
@@ -49,7 +49,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
         price: product.price || 0,
         imageUrl: product.imageUrl || null,
         shopeeLink: product.shopeeLink || null,
-        tiktokLink: product.tiktokLink || null,
+        tikTokLink: product.tikTokLink || null,
         categoryId: product.categoryId || 0,
         metaTitle: product.metaTitle || null,
         metaDescription: product.metaDescription || null,
@@ -62,7 +62,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
         price: 0,
         imageUrl: null,
         shopeeLink: null,
-        tiktokLink: null,
+        tikTokLink: null,
         categoryId: categories.length > 0 ? categories[0].id : 0,
         metaTitle: null,
         metaDescription: null,
@@ -137,7 +137,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
         price: formData.price,
         imageUrl: formData.imageUrl?.trim() || null,
         shopeeLink: formData.shopeeLink?.trim() || null,
-        tiktokLink: formData.tiktokLink?.trim() || null,
+        tikTokLink: formData.tikTokLink?.trim() || null,
         categoryId: formData.categoryId,
         metaTitle: formData.metaTitle?.trim() || null,
         metaDescription: formData.metaDescription?.trim() || null,
@@ -352,7 +352,7 @@ const ProductForm: React.FC<ProductFormProps> = ({
 
           <div>
             <label
-              htmlFor="tiktokLink"
+              htmlFor="tikTokLink"
               className="block text-sm font-semibold text-gray-700 mb-2"
             >
               TikTok Link
@@ -375,9 +375,9 @@ const ProductForm: React.FC<ProductFormProps> = ({
               </div>
               <input
                 type="url"
-                id="tiktokLink"
-                name="tiktokLink"
-                value={formData.tiktokLink || ""}
+                id="tikTokLink"
+                name="tikTokLink"
+                value={formData.tikTokLink || ""}
                 onChange={handleChange}
                 className="w-full rounded-lg border border-gray-300 pl-10 pr-4 py-2.5 bg-white hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
                 placeholder="https://www.tiktok.com/..."

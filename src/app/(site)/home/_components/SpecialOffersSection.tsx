@@ -60,9 +60,10 @@ const SpecialOffersSection: React.FC = () => {
     return (
         <section className="border-t border-[var(--border-light)] bg-[var(--bg-light)]">
             <div className="container mx-auto">
-                <div className="relative overflow-hidden rounded-b-2xl shadow-md" style={{ boxShadow: `0 4px 16px var(--shadow-soft)` }}>
+                <div className="relative overflow-hidden rounded-lg bg-white shadow-sm">
+                    {/* Carousel */}
                     <div
-                        className="flex transition-transform duration-500 ease-in-out"
+                        className="flex transition-transform duration-300 ease-in-out"
                         style={{
                             transform: `translateX(-${activeIndex * 100}%)`,
                         }}
@@ -72,11 +73,9 @@ const SpecialOffersSection: React.FC = () => {
                                 key={offer.id}
                                 className="min-w-full relative"
                             >
-                                <div
-                                    className="relative overflow-hidden min-h-[200px] sm:min-h-[220px] md:min-h-[240px] flex items-center"
-                                >
+                                <div className="relative overflow-hidden min-h-[180px] flex items-center bg-gradient-to-r from-[var(--bg-light)] to-white">
                                     {/* Background Image */}
-                                    <div className="absolute inset-0 opacity-30">
+                                    <div className="absolute inset-0 opacity-20">
                                         <Image
                                             src={offer.background}
                                             alt={offer.title}
@@ -87,99 +86,59 @@ const SpecialOffersSection: React.FC = () => {
                                         />
                                     </div>
 
-                                    {/* Very light overlay for subtle contrast */}
-                                    <div 
-                                        className="absolute inset-0"
-                                        style={{
-                                            background: `linear-gradient(135deg, rgba(15, 34, 56, 0.15) 0%, rgba(47, 191, 113, 0.1) 100%)`,
-                                        }}
-                                    />
-
-                                    {/* Subtle background shapes */}
-                                    <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                                        <div 
-                                            className="absolute top-4 right-8 w-16 h-16 rounded-full opacity-15"
-                                            style={{ backgroundColor: 'var(--brand-green)' }}
-                                        />
-                                        <div 
-                                            className="absolute bottom-6 left-12 w-12 h-12 rounded-full opacity-10"
-                                            style={{ backgroundColor: 'var(--brand-navy)' }}
-                                        />
-                                        <div 
-                                            className="absolute top-1/2 right-16 w-8 h-8 rounded-full opacity-20"
-                                            style={{ backgroundColor: 'var(--brand-green)' }}
-                                        />
-                                    </div>
-
                                     {/* Content */}
-                                    <div className="relative z-10 w-full px-4 sm:px-6 md:px-8 py-6 sm:py-8">
-                                        <div className="max-w-5xl mx-auto">
-                                            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 sm:gap-6">
-                                                {/* Icon */}
-                                                <div className="flex-shrink-0 order-2 sm:order-1">
-                                                    <div 
-                                                        className="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl flex items-center justify-center text-3xl sm:text-4xl"
-                                                        style={{
-                                                            backgroundColor: 'var(--bg-overlay-white)',
-                                                            boxShadow: `0 4px 12px var(--shadow-soft)`,
-                                                        }}
-                                                    >
-                                                        <span>{offer.icon}</span>
-                                                    </div>
+                                    <div className="relative z-10 w-full px-4 py-5">
+                                        <div className="flex items-center gap-3 mb-3">
+                                            {/* Icon */}
+                                            {offer.icon && (
+                                                <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-white flex items-center justify-center text-2xl shadow-sm">
+                                                    {offer.icon}
                                                 </div>
-
-                                                {/* Text Content */}
-                                                <div className="flex-1 order-1 sm:order-2 text-center sm:text-left">
-                                                    <div className="flex flex-col sm:flex-row items-center sm:items-start gap-3 mb-3">
-                                                        {offer.badge && (
-                                                            <span 
-                                                                className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider"
-                                                                style={{
-                                                                    backgroundColor: 'var(--brand-green)',
-                                                                    color: 'var(--text-inverse)',
-                                                                    boxShadow: `0 2px 8px rgba(47, 191, 113, 0.4)`,
-                                                                }}
-                                                            >
-                                                                <span>✨</span>
-                                                                {offer.badge}
-                                                            </span>
-                                                        )}
-                                                        <h3 
-                                                            className="text-xl sm:text-2xl md:text-3xl font-bold"
-                                                            style={{ color: 'var(--text-dark)' }}
-                                                        >
-                                                            {offer.title}
-                                                        </h3>
-                                                    </div>
-                                                    <p 
-                                                        className="text-sm sm:text-base text-[var(--text-medium)] mb-4 max-w-2xl mx-auto sm:mx-0"
-                                                    >
-                                                        {offer.description}
-                                                    </p>
-                                                    <div className="flex justify-center sm:justify-start">
-                                                        <Link
-                                                            href={offer.ctaLink}
-                                                            className="group inline-flex items-center gap-2 rounded-full px-5 py-2.5 text-sm font-semibold transition-colors duration-300"
+                                            )}
+                                            
+                                            {/* Title & Badge */}
+                                            <div className="flex-1 min-w-0">
+                                                <div className="flex items-center gap-2 mb-1 flex-wrap">
+                                                    {offer.badge && (
+                                                        <span 
+                                                            className="inline-flex items-center rounded px-2 py-0.5 text-xs font-semibold uppercase"
                                                             style={{
-                                                                backgroundColor: 'var(--btn-primary)',
+                                                                backgroundColor: 'var(--brand-green)',
                                                                 color: 'var(--text-inverse)',
-                                                                boxShadow: `0 4px 12px rgba(47, 191, 113, 0.3)`,
                                                             }}
                                                         >
-                                                            {offer.ctaText}
-                                                            <span className="text-base transition-transform duration-300 group-hover:translate-x-1">→</span>
-                                                        </Link>
-                                                    </div>
+                                                            {offer.badge}
+                                                        </span>
+                                                    )}
+                                                    <h3 
+                                                        className="text-lg font-bold leading-tight"
+                                                        style={{ color: 'var(--text-dark)' }}
+                                                    >
+                                                        {offer.title}
+                                                    </h3>
                                                 </div>
-
-                                                {/* Decorative sparkles */}
-                                                <div className="hidden md:block absolute top-2 right-4 text-2xl opacity-30 animate-pulse" style={{ animationDelay: '1.5s' }}>
-                                                    ✨
-                                                </div>
-                                                <div className="hidden md:block absolute bottom-2 left-4 text-xl opacity-25 animate-pulse" style={{ animationDelay: '2s' }}>
-                                                    ⭐
-                                                </div>
+                                                <p 
+                                                    className="text-sm leading-relaxed"
+                                                    style={{ color: 'var(--text-medium)' }}
+                                                >
+                                                    {offer.description}
+                                                </p>
                                             </div>
+                                        </div>
+
+                                        {/* CTA Button */}
+                                        <div className="mt-3">
+                                            <Link
+                                                href={offer.ctaLink}
+                                                className="inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors"
+                                                style={{
+                                                    backgroundColor: 'var(--btn-primary)',
+                                                    color: 'var(--text-inverse)',
+                                                }}
+                                            >
+                                                {offer.ctaText}
+                                                <span>→</span>
+                                            </Link>
                                         </div>
                                     </div>
                                 </div>
@@ -188,38 +147,20 @@ const SpecialOffersSection: React.FC = () => {
                     </div>
 
                     {/* Navigation dots */}
-                    <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 z-20">
+                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1.5 z-10">
                         {offers.map((_, index) => (
                             <button
                                 key={index}
                                 onClick={() => setActiveIndex(index)}
-                                className={`rounded-full transition-all duration-300 ${
+                                className={`rounded-full transition-all duration-200 ${
                                     index === activeIndex
-                                        ? 'bg-[var(--brand-green)] w-6 h-1.5 shadow-sm'
-                                        : 'bg-[var(--border-dark)]/50 w-1.5 h-1.5 hover:bg-[var(--border-dark)]'
+                                        ? 'bg-[var(--brand-green)] w-6 h-1.5'
+                                        : 'bg-gray-300 w-1.5 h-1.5'
                                 }`}
                                 aria-label={`Xem ưu đãi ${index + 1}`}
                             />
                         ))}
                     </div>
-
-                    {/* Previous/Next buttons - smaller */}
-                    <button
-                        onClick={() => setActiveIndex((prev) => (prev - 1 + offers.length) % offers.length)}
-                        className="absolute left-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center transition-colors duration-300 hover:bg-white shadow-md border border-[var(--border-light)]"
-                        aria-label="Ưu đãi trước"
-                        style={{ color: 'var(--brand-navy)' }}
-                    >
-                        <span className="text-lg font-bold">‹</span>
-                    </button>
-                    <button
-                        onClick={() => setActiveIndex((prev) => (prev + 1) % offers.length)}
-                        className="absolute right-2 top-1/2 -translate-y-1/2 z-20 w-8 h-8 rounded-full bg-white/95 backdrop-blur-sm flex items-center justify-center transition-colors duration-300 hover:bg-white shadow-md border border-[var(--border-light)]"
-                        aria-label="Ưu đãi tiếp theo"
-                        style={{ color: 'var(--brand-navy)' }}
-                    >
-                        <span className="text-lg font-bold">›</span>
-                    </button>
                 </div>
             </div>
         </section>

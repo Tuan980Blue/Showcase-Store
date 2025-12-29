@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import type { ProductListItemDto } from '@/types/product.types';
 
 interface ProductGridProps {
@@ -47,14 +48,17 @@ const ProductGrid: React.FC<ProductGridProps> = ({
           className="group flex flex-col overflow-hidden rounded-xl border bg-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
           style={{ borderColor: 'var(--border-light)' }}
         >
-          <div className="relative aspect-square w-full bg-[var(--bg-mint)]">
+          <Link 
+            href={`/products/${product.slug}`}
+            className="relative block aspect-square w-full bg-[var(--bg-mint)]"
+          >
             {product.imageUrl ? (
               <Image
                 src={product.imageUrl}
                 alt={product.name}
                 fill
                 sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
-                className="object-cover"
+                className="object-cover transition-transform duration-300 group-hover:scale-110"
                 priority={false}
               />
             ) : (
@@ -62,11 +66,13 @@ const ProductGrid: React.FC<ProductGridProps> = ({
                 No image
               </div>
             )}
-          </div>
+          </Link>
           <div className="flex flex-1 flex-col p-2 sm:p-3">
-            <h3 className="line-clamp-2 text-[11px] font-medium text-[var(--text-dark)] group-hover:text-[var(--brand-navy)] sm:text-xs md:text-sm">
-              {product.name}
-            </h3>
+            <Link href={`/products/${product.slug}`}>
+              <h3 className="line-clamp-2 text-[11px] font-medium text-[var(--text-dark)] group-hover:text-[var(--brand-navy)] transition-colors sm:text-xs md:text-sm">
+                {product.name}
+              </h3>
+            </Link>
             <p className="mt-1 text-[10px] text-[var(--text-light)] sm:text-xs">
               {product.categoryName}
             </p>
@@ -81,6 +87,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
                     href={product.shopeeLink}
                     target="_blank"
                     rel="noreferrer"
+                    onClick={(e) => e.stopPropagation()}
                     className="inline-flex items-center gap-1 rounded-full bg-[#ee4d2d] px-2 py-1 text-[9px] font-medium text-white shadow-sm hover:bg-[#d63f22] sm:text-[10px]"
                   >
                     <Image
@@ -98,6 +105,7 @@ const ProductGrid: React.FC<ProductGridProps> = ({
                     href={product.tikTokLink}
                     target="_blank"
                     rel="noreferrer"
+                    onClick={(e) => e.stopPropagation()}
                     className="inline-flex items-center gap-1 rounded-full bg-black px-2 py-1 text-[9px] font-medium text-white shadow-sm hover:bg-[#111111] sm:text-[10px]"
                   >
                     <Image

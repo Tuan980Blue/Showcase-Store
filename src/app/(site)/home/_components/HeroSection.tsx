@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import type { ProductListItemDto } from '@/types/product.types';
 import Image from "next/image";
+import Link from "next/link";
 
 interface HeroSectionProps {
   products: ProductListItemDto[];
@@ -127,8 +128,11 @@ const HeroSection: React.FC<HeroSectionProps> = ({ products, loading }) => {
 
             {canSlide && (
               <div className="flex flex-1 flex-col justify-between space-y-3">
-                <div className="flex gap-3 sm:gap-4">
-                  <div className="relative aspect-square w-28 shrink-0 overflow-hidden rounded-xl bg-[var(--bg-mint)] sm:w-32 md:w-36">
+                <div className="flex gap-3 sm:gap-4 group">
+                  <Link 
+                    href={`/products/${featured[activeIndex].slug}`}
+                    className="relative aspect-square w-28 shrink-0 overflow-hidden rounded-xl bg-[var(--bg-mint)] sm:w-32 md:w-36 transition-transform duration-300 group-hover:scale-105"
+                  >
                     {/* Platform badge */}
                     {(featured[activeIndex].shopeeLink || featured[activeIndex].tikTokLink) && (
                       <div className="absolute left-1 top-1 z-10 flex items-center gap-1 rounded-full bg-black/55 px-1.5 py-0.5 text-[9px] font-medium text-white backdrop-blur-sm sm:left-1.5 sm:top-1.5 sm:text-[10px]">
@@ -177,11 +181,13 @@ const HeroSection: React.FC<HeroSectionProps> = ({ products, loading }) => {
                         Chưa có hình ảnh
                       </div>
                     )}
-                  </div>
+                  </Link>
                   <div className="min-w-0 flex-1 space-y-2">
-                    <p className="line-clamp-2 text-sm font-semibold text-[var(--text-dark)] sm:text-base">
-                      {featured[activeIndex].name}
-                    </p>
+                    <Link href={`/products/${featured[activeIndex].slug}`}>
+                      <p className="line-clamp-2 text-sm font-semibold text-[var(--text-dark)] sm:text-base group-hover:text-[var(--brand-green)] transition-colors">
+                        {featured[activeIndex].name}
+                      </p>
+                    </Link>
                     <p className="text-[11px] text-[var(--text-light)] sm:text-xs">
                       {featured[activeIndex].categoryName}
                     </p>
