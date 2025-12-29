@@ -6,7 +6,7 @@ export interface CreateProductDto {
   price: number;
   imageUrl?: string | null;
   shopeeLink?: string | null;
-  tiktokLink?: string | null;
+  tikTokLink?: string | null;
   categoryId: number;
   metaTitle?: string | null;
   metaDescription?: string | null;
@@ -18,7 +18,7 @@ export interface UpdateProductDto {
   price?: number | null;
   imageUrl?: string | null;
   shopeeLink?: string | null;
-  tiktokLink?: string | null;
+  tikTokLink?: string | null;
   categoryId?: number | null;
   metaTitle?: string | null;
   metaDescription?: string | null;
@@ -37,7 +37,7 @@ export interface ProductResponseDto {
   price: number;
   imageUrl?: string | null;
   shopeeLink?: string | null;
-  tiktokLink?: string | null;
+  tikTokLink?: string | null;
   metaTitle?: string | null;
   metaDescription?: string | null;
   categoryId: number;

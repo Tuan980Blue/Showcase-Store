@@ -86,33 +86,37 @@ const TrendingProductsSection: React.FC<TrendingProductsSectionProps> = ({
                             )}
 
                             {/* Product image */}
-                            <div className="relative aspect-square w-full overflow-hidden bg-[var(--bg-mint)]">
-                                {product.imageUrl ? (
-                                    <Image
-                                        src={product.imageUrl}
-                                        alt={product.name}
-                                        fill
-                                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
-                                        className="object-cover transition-transform duration-300 group-hover:scale-110"
-                                    />
-                                ) : (
-                                    <div className="absolute inset-0 flex items-center justify-center text-xs text-[var(--text-light)]">
-                                        Chưa có hình ảnh
-                                    </div>
-                                )}
-                                
-                                {/* Overlay gradient */}
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                            </div>
+                            <Link href={`/products/${product.slug}`}>
+                                <div className="relative aspect-square w-full overflow-hidden bg-[var(--bg-mint)]">
+                                    {product.imageUrl ? (
+                                        <Image
+                                            src={product.imageUrl}
+                                            alt={product.name}
+                                            fill
+                                            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
+                                            className="object-cover transition-transform duration-300 group-hover:scale-110"
+                                        />
+                                    ) : (
+                                        <div className="absolute inset-0 flex items-center justify-center text-xs text-[var(--text-light)]">
+                                            Chưa có hình ảnh
+                                        </div>
+                                    )}
+                                    
+                                    {/* Overlay gradient */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                                </div>
+                            </Link>
 
                             {/* Product info */}
                             <div className="p-3 sm:p-4">
                                 <p className="text-[10px] text-[var(--text-light)] mb-1 uppercase tracking-wide">
                                     {product.categoryName}
                                 </p>
-                                <h3 className="line-clamp-2 text-sm font-semibold text-[var(--text-dark)] mb-2 group-hover:text-[var(--brand-green)] transition-colors">
-                                    {product.name}
-                                </h3>
+                                <Link href={`/products/${product.slug}`}>
+                                    <h3 className="line-clamp-2 text-sm font-semibold text-[var(--text-dark)] mb-2 group-hover:text-[var(--brand-green)] transition-colors">
+                                        {product.name}
+                                    </h3>
+                                </Link>
                                 
                                 <div className="flex items-center justify-between gap-2">
                                     <p className="text-base font-bold text-[var(--brand-green)]">
@@ -125,7 +129,6 @@ const TrendingProductsSection: React.FC<TrendingProductsSectionProps> = ({
                                                 target="_blank"
                                                 rel="noreferrer"
                                                 className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-[#ee4d2d] hover:bg-[#d63f22] transition-colors"
-                                                onClick={(e) => e.stopPropagation()}
                                             >
                                                 <Image
                                                     src="/shopee.png"
@@ -142,7 +145,6 @@ const TrendingProductsSection: React.FC<TrendingProductsSectionProps> = ({
                                                 target="_blank"
                                                 rel="noreferrer"
                                                 className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-black hover:bg-[#111111] transition-colors"
-                                                onClick={(e) => e.stopPropagation()}
                                             >
                                                 <Image
                                                     src="/tiktok.png"
