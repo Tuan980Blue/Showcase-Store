@@ -1,8 +1,6 @@
 # 🎬 Web Trưng Bày Sản Phẩm
 
-## 📺 PreView Web
-
-👉 [Click](https://dientutuananh.vercel.app)
+## 📺 PreView Web 👉 [Click](https://dientutuananh.vercel.app)
 
 ## ☁️ Cấu hình Cloudinary cho frontend
 
